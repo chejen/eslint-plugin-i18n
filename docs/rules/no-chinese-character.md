@@ -1,6 +1,6 @@
 # Disallow Chinese Characters (no-chinese-character)
 
-In an internationalized application, Chinese characters are not disallowed. This rule helps to find out where Chinese characters are.
+In an internationalized application, Chinese characters are not allowed. This rule helps to find out where Chinese characters are.
 
 ## Rule Details
 
