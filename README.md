@@ -42,7 +42,7 @@ Finally, enable the rules that you would like to use.
 
 # List of supported rules
 
-* [no-chinese-character](docs/rules/no-chinese-character.md): Prevent missing `displayName` in a React component definition
+* [no-chinese-character](docs/rules/no-chinese-character.md): Prevent usage of Chinese characters.
 
 
 # License
