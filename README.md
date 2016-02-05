@@ -1,3 +1,18 @@
+[![NPM License][npm-license-image]][npm-license-url]
+[![NPM Version][npm-version-image]][npm-version-url]
+[![NPM Downloads][npm-downloads-image]][npm-downloads-url]
+[![Travis CI][travis-image]][travis-url]
+
+[npm-license-image]: https://img.shields.io/npm/l/eslint-plugin-i18n.svg
+[npm-license-url]: https://www.npmjs.com/package/eslint-plugin-i18n
+[npm-version-image]: https://img.shields.io/npm/v/eslint-plugin-i18n.svg
+[npm-version-url]: https://www.npmjs.com/package/eslint-plugin-i18n
+[npm-downloads-image]: https://img.shields.io/npm/dt/eslint-plugin-i18n.svg
+[npm-downloads-url]: https://www.npmjs.com/package/eslint-plugin-i18n
+[travis-image]: https://img.shields.io/travis/chejen/eslint-plugin-i18n.svg
+[travis-url]: https://travis-ci.org/chejen/eslint-plugin-i18n
+
+
 eslint-plugin-i18n
 ===================
 
