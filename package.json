@@ -14,8 +14,8 @@
 	"author": "chejen",
 	"main": "index.js",
 	"scripts": {
-		"test": "mocha tests/**/*.js && npm run coverage",
-		"coverage": "istanbul cover node_modules/mocha/bin/_mocha tests/**/*.js -- -R spec && codecov"
+		"test": "mocha tests/**/*.js",
+		"posttest": "istanbul cover node_modules/mocha/bin/_mocha tests/**/*.js -- -R spec && codecov"
 	},
 	"repository": {
 		"type": "git",
