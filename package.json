@@ -1,16 +1,21 @@
 {
 	"name": "eslint-plugin-i18n",
-	"version": "0.1.1",
+	"version": "1.0.0",
 	"description": "Internationalization's linting rules for ESLint",
 	"keywords": [
 		"eslint",
 		"eslintplugin",
-		"eslint-plugin"
+		"eslint-plugin",
+		"i18n",
+		"internationalization",
+		"l10n",
+		"localization"
 	],
 	"author": "chejen",
 	"main": "index.js",
 	"scripts": {
-		"test": "mocha tests/**/*.js"
+		"test": "mocha tests/**/*.js",
+		"coverage": "istanbul cover node_modules/mocha/bin/_mocha tests/**/*.js -- -R spec"
 	},
 	"repository": {
 		"type": "git",
@@ -18,6 +23,7 @@
 	},
 	"devDependencies": {
 		"eslint": "2.0.0-rc.0",
+		"istanbul": "0.4.2",
 		"mocha": "2.4.5"
 	},
 	"license": "MIT"
