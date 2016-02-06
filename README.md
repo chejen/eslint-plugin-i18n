@@ -1,7 +1,8 @@
 [![NPM License][npm-license-image]][npm-license-url]
 [![NPM Version][npm-version-image]][npm-version-url]
 [![NPM Downloads][npm-downloads-image]][npm-downloads-url]
-[![Travis CI][travis-image]][travis-url]
+[![Build Status][travis-image]][travis-url]
+[![Coverage Status][codecov-image]][codecov-url]
 
 [npm-license-image]: https://img.shields.io/npm/l/eslint-plugin-i18n.svg
 [npm-license-url]: https://www.npmjs.com/package/eslint-plugin-i18n
@@ -11,6 +12,8 @@
 [npm-downloads-url]: https://www.npmjs.com/package/eslint-plugin-i18n
 [travis-image]: https://img.shields.io/travis/chejen/eslint-plugin-i18n.svg
 [travis-url]: https://travis-ci.org/chejen/eslint-plugin-i18n
+[codecov-image]: https://codecov.io/github/chejen/eslint-plugin-i18n/coverage.svg?branch=master
+[codecov-url]: https://codecov.io/github/chejen/eslint-plugin-i18n?branch=master
 
 
 eslint-plugin-i18n
