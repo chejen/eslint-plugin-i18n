@@ -22,10 +22,10 @@
 		"url": "https://github.com/chejen/eslint-plugin-i18n"
 	},
 	"devDependencies": {
-		"codecov": "1.0.1",
-		"eslint": "2.0.0-rc.0",
-		"istanbul": "0.4.2",
-		"mocha": "2.4.5"
+		"codecov": "~1.0.1",
+		"eslint": "~2.1.0",
+		"istanbul": "~0.4.2",
+		"mocha": "~2.4.5"
 	},
 	"license": "MIT"
 }
