@@ -52,7 +52,9 @@ Finally, enable the rules that you would like to use.
 ```json
 {
   "rules": {
-    "i18n/no-chinese-character": 1
+    "i18n/no-chinese-character": 1,
+    "i18n/no-non-ascii-character": 1,
+    "i18n/no-date-pattern": 1
   }
 }
 ```
@@ -61,6 +63,8 @@ Finally, enable the rules that you would like to use.
 # List of supported rules
 
 * [no-chinese-character](docs/rules/no-chinese-character.md): Prevent usage of Chinese characters.
+* [no-non-ascii-character](docs/rules/no-chinese-character.md): Flags use of non-ASCII characters.
+* [no-date-pattern](docs/rules/no-chinese-character.md): Flags use of hard-coded date patterns.
 
 
 # License
