@@ -61,6 +61,7 @@ Finally, enable the rules that you would like to use.
 # List of supported rules
 
 * [no-chinese-character](docs/rules/no-chinese-character.md): Prevent usage of Chinese characters.
+* [no-thai-character](docs/rules/no-thai-character.md): Prevent usage of Thai characters.
 
 
 # License
