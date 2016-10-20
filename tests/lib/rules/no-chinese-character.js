@@ -1,5 +1,5 @@
 /**
- * @fileoverview Rule to flag use of chinese character
+ * @fileoverview Rule to flag use of Chinese character
  * @author Chang, Che-Jen
  */
 
@@ -25,14 +25,14 @@ ruleTester.run("no-chinese-character", rule, {
 		"/* 注释 */"
 	],
 	invalid: [
-		{ code: "console.log('english' + '繁體/*字*/');", errors: [{ message: "Using chinese characters: '繁體/*字*/'", type: "Literal"}] },
-		{ code: "console.log(\"english\" && \"//简体字\");", errors: [{ message: "Using chinese characters: \"//简体字\"", type: "Literal"}] },
-		{ code: "var str = '變數'.substr(0, 1);", errors: [{ message: "Using chinese characters: '變數'", type: "Literal"}] },
-		{ code: "var str = \"变量\";", errors: [{ message: "Using chinese characters: \"变量\"", type: "Literal"}] },
-		{ code: "var obj = { 'key': '物件' };", errors: [{ message: "Using chinese characters: '物件'", type: "Literal"}] },
-		{ code: "var obj = { \"对象\": \"value\" };", errors: [{ message: "Using chinese characters: \"对象\"", type: "Literal"}] },
-		{ code: "var func = function(v){return v;}; func('函式');", errors: [{ message: "Using chinese characters: '函式'", type: "Literal"}] },
-		{ code: "function f(v){return \"返回值\";}", errors: [{ message: "Using chinese characters: \"返回值\"", type: "Literal"}] },
-		{ code: "var ary = [\"数组\"];", errors: [{ message: "Using chinese characters: \"数组\"", type: "Literal"}] },
+		{ code: "console.log('english' + '繁體/*字*/');", errors: [{ message: "Using Chinese characters: '繁體/*字*/'", type: "Literal"}] },
+		{ code: "console.log(\"english\" && \"//简体字\");", errors: [{ message: "Using Chinese characters: \"//简体字\"", type: "Literal"}] },
+		{ code: "var str = '變數'.substr(0, 1);", errors: [{ message: "Using Chinese characters: '變數'", type: "Literal"}] },
+		{ code: "var str = \"变量\";", errors: [{ message: "Using Chinese characters: \"变量\"", type: "Literal"}] },
+		{ code: "var obj = { 'key': '物件' };", errors: [{ message: "Using Chinese characters: '物件'", type: "Literal"}] },
+		{ code: "var obj = { \"对象\": \"value\" };", errors: [{ message: "Using Chinese characters: \"对象\"", type: "Literal"}] },
+		{ code: "var func = function(v){return v;}; func('函式');", errors: [{ message: "Using Chinese characters: '函式'", type: "Literal"}] },
+		{ code: "function f(v){return \"返回值\";}", errors: [{ message: "Using Chinese characters: \"返回值\"", type: "Literal"}] },
+		{ code: "var ary = [\"数组\"];", errors: [{ message: "Using Chinese characters: \"数组\"", type: "Literal"}] }
 	]
 });
