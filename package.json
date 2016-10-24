@@ -1,6 +1,6 @@
 {
 	"name": "eslint-plugin-i18n",
-	"version": "1.0.3",
+	"version": "1.1.0",
 	"description": "Internationalization's linting rules for ESLint",
 	"keywords": [
 		"eslint",

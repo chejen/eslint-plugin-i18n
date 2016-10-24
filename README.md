@@ -61,6 +61,9 @@ Finally, enable the rules that you would like to use.
 # List of supported rules
 
 * [no-chinese-character](docs/rules/no-chinese-character.md): Prevent usage of Chinese characters.
+* [no-greek-character](docs/rules/no-greek-character.md): Prevent usage of Greek characters.
+* [no-japanese-character](docs/rules/no-japanese-character.md): Prevent usage of Japanese characters.
+* [no-korean-character](docs/rules/no-korean-character.md): Prevent usage of Korean characters.
 * [no-thai-character](docs/rules/no-thai-character.md): Prevent usage of Thai characters.
 
 
