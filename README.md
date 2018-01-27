@@ -52,7 +52,12 @@ Finally, enable the rules that you would like to use.
 ```json
 {
   "rules": {
-    "i18n/no-chinese-character": 1
+    "i18n/no-chinese-character": 1,
+    "i18n/no-greek-character": 1,
+    "i18n/no-japanese-character": 1,
+    "i18n/no-korean-character": 1,
+    "i18n/no-russian-character": 1,
+    "i18n/no-thai-character": 1
   }
 }
 ```
@@ -64,6 +69,7 @@ Finally, enable the rules that you would like to use.
 * [no-greek-character](docs/rules/no-greek-character.md): Prevent usage of Greek characters.
 * [no-japanese-character](docs/rules/no-japanese-character.md): Prevent usage of Japanese characters.
 * [no-korean-character](docs/rules/no-korean-character.md): Prevent usage of Korean characters.
+* [no-russian-character](docs/rules/no-russian-character.md): Prevent usage of Russian characters.
 * [no-thai-character](docs/rules/no-thai-character.md): Prevent usage of Thai characters.
 
 
