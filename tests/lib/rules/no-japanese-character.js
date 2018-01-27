@@ -20,11 +20,19 @@ var ruleTester = new RuleTester();
 ruleTester.run("no-japanese-character", rule, {
 	valid: [
 		"console.log(\"english\");",
-		"var str = \"한국어\";",
+		{
+			code: "var str = `한국어`;",
+			env: { es6: true }
+		},
 		"// 単一行コメント",
 		"/* マルチラインのコメント */"
 	],
 	invalid: [
+		{
+			code: "var tl = `テンプレート文字列`",
+			env: { es6: true },
+			errors: [{ message: "Using Japanese characters: テンプレート文字列", type: "TemplateElement" }]
+		},
 		{ code: "console.log('english' + '日本語');", errors: [{ message: "Using Japanese characters: '日本語'", type: "Literal"}] },
 		{ code: "var str = 'ストリング'.substr(0, 1);", errors: [{ message: "Using Japanese characters: 'ストリング'", type: "Literal"}] },
 		{ code: "var obj = { 'key': 'オブジェクト' };", errors: [{ message: "Using Japanese characters: 'オブジェクト'", type: "Literal"}] },

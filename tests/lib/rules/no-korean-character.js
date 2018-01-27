@@ -20,11 +20,19 @@ var ruleTester = new RuleTester();
 ruleTester.run("no-korean-character", rule, {
 	valid: [
 		"console.log(\"english\");",
-		"var str = \"中文\";",
+		{
+			code: "var str = `中文`;",
+			env: { es6: true }
+		},
 		"// 한 줄 댓글",
 		"/* 멀티 라인 댓글 */"
 	],
 	invalid: [
+		{
+			code: "var tl = `템플릿 문자열`",
+			env: { es6: true },
+			errors: [{ message: "Using Korean characters: 템플릿 문자열", type: "TemplateElement" }]
+		},
 		{ code: "console.log('english' + '한국어');", errors: [{ message: "Using Korean characters: '한국어'", type: "Literal"}] },
 		{ code: "var str = '문자열'.substr(0, 1);", errors: [{ message: "Using Korean characters: '문자열'", type: "Literal"}] },
 		{ code: "var obj = { 'key': '사물' };", errors: [{ message: "Using Korean characters: '사물'", type: "Literal"}] },

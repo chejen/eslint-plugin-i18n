@@ -20,11 +20,23 @@ var ruleTester = new RuleTester();
 ruleTester.run("no-chinese-character", rule, {
 	valid: [
 		"console.log(\"english\");",
-		"var str = \"english\";",
+		{
+			code: "var str = `한국어`;",
+			env: { es6: true }
+		},
 		"// 注解",
 		"/* 注释 */"
 	],
 	invalid: [
+		{
+			code: "var str = `樣板字串`; console.log(`${str}、模板字符串`);",
+			env: { es6: true },
+			errors: [{
+				message: "Using Chinese characters: 樣板字串", type: "TemplateElement"
+			}, {
+				message: "Using Chinese characters: 、模板字符串", type: "TemplateElement"
+			}]
+		},
 		{ code: "console.log('english' + '繁體/*字*/');", errors: [{ message: "Using Chinese characters: '繁體/*字*/'", type: "Literal"}] },
 		{ code: "console.log(\"english\" && \"//简体字\");", errors: [{ message: "Using Chinese characters: \"//简体字\"", type: "Literal"}] },
 		{ code: "var str = '變數'.substr(0, 1);", errors: [{ message: "Using Chinese characters: '變數'", type: "Literal"}] },

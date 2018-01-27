@@ -20,11 +20,19 @@ var ruleTester = new RuleTester();
 ruleTester.run("no-greek-character", rule, {
 	valid: [
 		"console.log(\"english\");",
-		"var str = \"中文\";",
+		{
+			code: "var str = `中文`;",
+			env: { es6: true }
+		},
 		"// Σχόλιο μονής γραμμής",
 		"/* Σχολιασμός πολλαπλών γραμμών */"
 	],
 	invalid: [
+		{
+			code: "var str = `συμβολοσειρές`",
+			env: { es6: true },
+			errors: [{ message: "Using Greek characters: συμβολοσειρές", type: "TemplateElement" }]
+		},
 		{ code: "console.log('english' + 'Ελληνικά');", errors: [{ message: "Using Greek characters: 'Ελληνικά'", type: "Literal"}] },
 		{ code: "var str = 'συμβολοσειρές'.substr(0, 1);", errors: [{ message: "Using Greek characters: 'συμβολοσειρές'", type: "Literal"}] },
 		{ code: "var obj = { 'key': 'αντικείμενο' };", errors: [{ message: "Using Greek characters: 'αντικείμενο'", type: "Literal"}] },
