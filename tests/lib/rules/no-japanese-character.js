@@ -9,8 +9,8 @@
 // Requirements
 //------------------------------------------------------------------------------
 
-var rule = require("../../../lib/rules/no-japanese-character"),
-	RuleTester = require('eslint').RuleTester;
+var rule = require("../../../lib/rules/no-japanese-character");
+var RuleTester = require("eslint").RuleTester;
 
 //------------------------------------------------------------------------------
 // Tests

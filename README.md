@@ -76,3 +76,10 @@ Finally, enable the rules that you would like to use.
 # License
 
 eslint-plugin-i18n is licensed under the [MIT License](http://www.opensource.org/licenses/mit-license.php).
+
+
+# Changelog
+
+## v2.0.0 - July 4, 2020
+- Dropped support for node < 10
+- Added JSX support

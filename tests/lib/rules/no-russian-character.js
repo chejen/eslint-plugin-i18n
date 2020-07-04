@@ -9,8 +9,8 @@
 // Requirements
 //------------------------------------------------------------------------------
 
-var rule = require("../../../lib/rules/no-russian-character"),
-	RuleTester = require('eslint').RuleTester;
+var rule = require("../../../lib/rules/no-russian-character");
+var RuleTester = require("eslint").RuleTester;
 
 //------------------------------------------------------------------------------
 // Tests
