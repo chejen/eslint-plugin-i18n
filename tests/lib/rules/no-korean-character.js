@@ -29,6 +29,19 @@ ruleTester.run("no-korean-character", rule, {
 	],
 	invalid: [
 		{
+			code: "var tpl = <Hello title='안녕하세요'>컴포넌트</Hello>",
+			parserOptions: {
+				ecmaFeatures: {
+					jsx: true
+				}
+			},
+			errors: [{
+				message: "Using Korean characters: '안녕하세요'", type: "Literal"
+			}, {
+				message: "Using Korean characters: 컴포넌트", type: "JSXText"
+			}]
+		},
+		{
 			code: "var tl = `템플릿 문자열`",
 			env: { es6: true },
 			errors: [{ message: "Using Korean characters: 템플릿 문자열", type: "TemplateElement" }]

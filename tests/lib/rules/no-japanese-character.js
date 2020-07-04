@@ -29,6 +29,19 @@ ruleTester.run("no-japanese-character", rule, {
 	],
 	invalid: [
 		{
+			code: "var tpl = <Hello title='こんにちは'>コンポーネント</Hello>",
+			parserOptions: {
+				ecmaFeatures: {
+					jsx: true
+				}
+			},
+			errors: [{
+				message: "Using Japanese characters: 'こんにちは'", type: "Literal"
+			}, {
+				message: "Using Japanese characters: コンポーネント", type: "JSXText"
+			}]
+		},
+		{
 			code: "var tl = `テンプレート文字列`",
 			env: { es6: true },
 			errors: [{ message: "Using Japanese characters: テンプレート文字列", type: "TemplateElement" }]

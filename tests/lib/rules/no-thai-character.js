@@ -29,6 +29,19 @@ ruleTester.run("no-thai-character", rule, {
 	],
 	invalid: [
 		{
+			code: "var tpl = <Hello title='สวัสดี'>คอมโพเนนท์</Hello>",
+			parserOptions: {
+				ecmaFeatures: {
+					jsx: true
+				}
+			},
+			errors: [{
+				message: "Using Thai characters: 'สวัสดี'", type: "Literal"
+			}, {
+				message: "Using Thai characters: คอมโพเนนท์", type: "JSXText"
+			}]
+		},
+		{
 			code: "var tl = `อักษรแม่แบบ`",
 			env: { es6: true },
 			errors: [{ message: "Using Thai characters: อักษรแม่แบบ", type: "TemplateElement" }]

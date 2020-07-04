@@ -29,6 +29,19 @@ ruleTester.run("no-russian-character", rule, {
 	],
 	invalid: [
 		{
+			code: "var tpl = <Hello title='Привет'>компонентов</Hello>",
+			parserOptions: {
+				ecmaFeatures: {
+					jsx: true
+				}
+			},
+			errors: [{
+				message: "Using Russian characters: 'Привет'", type: "Literal"
+			}, {
+				message: "Using Russian characters: компонентов", type: "JSXText"
+			}]
+		},
+		{
 			code: "var tl = `Шаблонные строки`",
 			env: { es6: true },
 			errors: [{ message: "Using Russian characters: Шаблонные строки", type: "TemplateElement" }]

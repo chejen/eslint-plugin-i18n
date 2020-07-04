@@ -29,6 +29,19 @@ ruleTester.run("no-greek-character", rule, {
 	],
 	invalid: [
 		{
+			code: "var tpl = <Hello title='Χαίρετε'>συστατικό</Hello>",
+			parserOptions: {
+				ecmaFeatures: {
+					jsx: true
+				}
+			},
+			errors: [{
+				message: "Using Greek characters: 'Χαίρετε'", type: "Literal"
+			}, {
+				message: "Using Greek characters: συστατικό", type: "JSXText"
+			}]
+		},
+		{
 			code: "var str = `συμβολοσειρές`",
 			env: { es6: true },
 			errors: [{ message: "Using Greek characters: συμβολοσειρές", type: "TemplateElement" }]

@@ -29,6 +29,19 @@ ruleTester.run("no-chinese-character", rule, {
 	],
 	invalid: [
 		{
+			code: "var tpl = <Hello title='你好'>组件</Hello>",
+			parserOptions: {
+				ecmaFeatures: {
+					jsx: true
+				}
+			},
+			errors: [{
+				message: "Using Chinese characters: '你好'", type: "Literal"
+			}, {
+				message: "Using Chinese characters: 组件", type: "JSXText"
+			}]
+		},
+		{
 			code: "var str = `樣板字串`; console.log(`${str}、模板字符串`);",
 			env: { es6: true },
 			errors: [{
