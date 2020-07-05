@@ -1,0 +1,4 @@
+coverage
+tests
+.editorconfig
+.travis.yml

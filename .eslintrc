@@ -1,0 +1,19 @@
+{
+  "extends": ["eslint:recommended", "google"],
+  "env": {
+    "es6": true,
+    "node": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "script",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "rules": {
+    "max-len": 0,
+    "object-curly-spacing": ["error", "always"],
+    "require-jsdoc": 0
+  }
+}

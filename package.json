@@ -1,31 +1,47 @@
 {
-	"name": "eslint-plugin-i18n",
-	"version": "2.0.0",
-	"description": "Internationalization's linting rules for ESLint",
-	"keywords": [
-		"eslint",
-		"eslintplugin",
-		"eslint-plugin",
-		"i18n",
-		"internationalization",
-		"l10n",
-		"localization"
-	],
-	"author": "chejen",
-	"main": "index.js",
-	"scripts": {
-		"test": "mocha tests/**/*.js",
-		"posttest": "istanbul cover node_modules/mocha/bin/_mocha tests/**/*.js -- -R spec && codecov"
+  "name": "eslint-plugin-i18n",
+  "version": "2.0.0",
+  "description": "Internationalization's linting rules for ESLint",
+  "keywords": [
+    "eslint",
+    "eslintplugin",
+    "eslint-plugin",
+    "i18n",
+    "internationalization",
+    "l10n",
+    "localization"
+  ],
+  "author": "chejen",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint **/*.js",
+    "lint:fix": "eslint **/*.js --fix",
+    "test": "mocha tests/**/*.js",
+    "posttest": "istanbul cover node_modules/mocha/bin/_mocha tests/**/*.js -- -R spec && codecov"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chejen/eslint-plugin-i18n"
+  },
+  "devDependencies": {
+    "codecov": "^3.7.0",
+    "eslint": "^7.4.0",
+    "eslint-config-google": "~0.14.0",
+    "husky": "^4.2.5",
+    "istanbul": "~0.4.5",
+    "lint-staged": "^10.2.11",
+    "mocha": "^8.0.1"
 	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/chejen/eslint-plugin-i18n"
-	},
-	"devDependencies": {
-		"codecov": "^3.7.0",
-		"eslint": "^7.4.0",
-		"istanbul": "~0.4.5",
-		"mocha": "^8.0.1"
-	},
-	"license": "MIT"
+	"husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": ["npm test", "eslint --fix", "git add"]
+  },
+  "engines": {
+    "node": "^10.12.0 || >=12.0.0"
+  },
+  "license": "MIT"
 }
