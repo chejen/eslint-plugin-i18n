@@ -24,21 +24,25 @@
     "url": "https://github.com/chejen/eslint-plugin-i18n"
   },
   "devDependencies": {
-    "codecov": "^3.7.0",
-    "eslint": "^7.4.0",
+    "codecov": "^3.8.2",
+    "eslint": "^7.28.0",
     "eslint-config-google": "~0.14.0",
-    "husky": "^4.2.5",
+    "husky": "^6.0.0",
     "istanbul": "~0.4.5",
-    "lint-staged": "^10.2.11",
-    "mocha": "^8.0.1"
-	},
-	"husky": {
+    "lint-staged": "^11.0.0",
+    "mocha": "^9.0.0"
+  },
+  "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
     }
   },
   "lint-staged": {
-    "*.js": ["npm test", "eslint --fix", "git add"]
+    "*.js": [
+      "npm test",
+      "eslint --fix",
+      "git add"
+    ]
   },
   "engines": {
     "node": "^10.12.0 || >=12.0.0"
