@@ -26,6 +26,20 @@ ruleTester.run('no-thai-character', rule, {
     },
     '// ความคิดเห็นบรรทัดเดียว',
     '/* หลายสายความคิดเห็น */',
+    {
+      code: `
+        import ตัวระบุ0 from 'xyz';
+        ตัวระบุ1 = { ตัวระบุ2: 0 };
+        var ตัวระบุ3 = function ตัวระบุ4() {};
+        this.ตัวระบุ5 = 0;
+        a[ตัวระบุ6] = 0;
+        export default ตัวระบุ7;
+      `,
+      parserOptions: {
+        ecmaVersion: 6,
+        sourceType: 'module',
+      },
+    },
   ],
   invalid: [
     {
@@ -46,10 +60,67 @@ ruleTester.run('no-thai-character', rule, {
       env: { es6: true },
       errors: [{ message: 'Using Thai characters: อักษรแม่แบบ', type: 'TemplateElement' }],
     },
-    { code: 'console.log(\'english\' + \'ไทย\');', errors: [{ message: 'Using Thai characters: \'ไทย\'', type: 'Literal' }] },
-    { code: 'var str = \'ตัวแปร\'.substr(0, 1);', errors: [{ message: 'Using Thai characters: \'ตัวแปร\'', type: 'Literal' }] },
-    { code: 'var obj = { \'key\': \'วัตถุ\' };', errors: [{ message: 'Using Thai characters: \'วัตถุ\'', type: 'Literal' }] },
-    { code: 'var func = function(v){return v;}; func(\'ฟังก์ชัน\');', errors: [{ message: 'Using Thai characters: \'ฟังก์ชัน\'', type: 'Literal' }] },
-    { code: 'var ary = ["อาร์เรย์"];', errors: [{ message: 'Using Thai characters: "อาร์เรย์"', type: 'Literal' }] },
+    {
+      code: 'console.log(\'english\' + \'ไทย\');',
+      errors: [{ message: 'Using Thai characters: \'ไทย\'', type: 'Literal' }]
+    },
+    {
+      code: 'var str = \'ตัวแปร\'.substr(0, 1);',
+      errors: [{ message: 'Using Thai characters: \'ตัวแปร\'', type: 'Literal' }]
+    },
+    {
+      code: 'var obj = { \'key\': \'วัตถุ\' };',
+      errors: [{ message: 'Using Thai characters: \'วัตถุ\'', type: 'Literal' }]
+    },
+    {
+      code: 'var func = function(v){return v;}; func(\'ฟังก์ชัน\');',
+      errors: [{ message: 'Using Thai characters: \'ฟังก์ชัน\'', type: 'Literal' }]
+    },
+    {
+      code: 'var ary = ["อาร์เรย์"];',
+      errors: [{ message: 'Using Thai characters: "อาร์เรย์"', type: 'Literal' }]
+    },
+    {
+      code: `
+        import ตัวระบุ0 from 'xyz';
+        ตัวระบุ1 = { ตัวระบุ2: 0 };
+        var ตัวระบุ3 = function ตัวระบุ4() {};
+        this.ตัวระบุ5 = 0;
+        a[ตัวระบุ6] = 0;
+        export default ตัวระบุ7;
+      `,
+      parserOptions: {
+        ecmaVersion: 6,
+        sourceType: 'module',
+      },
+      options: [{
+        includeIdentifier: true,
+      }],
+      errors: [{
+        message: 'Using Thai characters: ตัวระบุ0',
+        type: 'Identifier',
+      }, {
+        message: 'Using Thai characters: ตัวระบุ1',
+        type: 'Identifier',
+      }, {
+        message: 'Using Thai characters: ตัวระบุ2',
+        type: 'Identifier',
+      }, {
+        message: 'Using Thai characters: ตัวระบุ3',
+        type: 'Identifier',
+      }, {
+        message: 'Using Thai characters: ตัวระบุ4',
+        type: 'Identifier',
+      }, {
+        message: 'Using Thai characters: ตัวระบุ5',
+        type: 'Identifier',
+      }, {
+        message: 'Using Thai characters: ตัวระบุ6',
+        type: 'Identifier',
+      }, {
+        message: 'Using Thai characters: ตัวระบุ7',
+        type: 'Identifier',
+      }],
+    },
   ],
 });

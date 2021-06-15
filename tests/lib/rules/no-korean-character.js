@@ -26,6 +26,20 @@ ruleTester.run('no-korean-character', rule, {
     },
     '// 한 줄 댓글',
     '/* 멀티 라인 댓글 */',
+    {
+      code: `
+        import 식별자0 from 'xyz';
+        식별자1 = { 식별자2: 0 };
+        var 식별자3 = function 식별자4() {};
+        this.식별자5 = 0;
+        a[식별자6] = 0;
+        export default 식별자7;
+      `,
+      parserOptions: {
+        ecmaVersion: 6,
+        sourceType: 'module',
+      },
+    },
   ],
   invalid: [
     {
@@ -46,10 +60,67 @@ ruleTester.run('no-korean-character', rule, {
       env: { es6: true },
       errors: [{ message: 'Using Korean characters: 템플릿 문자열', type: 'TemplateElement' }],
     },
-    { code: 'console.log(\'english\' + \'한국어\');', errors: [{ message: 'Using Korean characters: \'한국어\'', type: 'Literal' }] },
-    { code: 'var str = \'문자열\'.substr(0, 1);', errors: [{ message: 'Using Korean characters: \'문자열\'', type: 'Literal' }] },
-    { code: 'var obj = { \'key\': \'사물\' };', errors: [{ message: 'Using Korean characters: \'사물\'', type: 'Literal' }] },
-    { code: 'var func = function(v){return v;}; func(\'함수\');', errors: [{ message: 'Using Korean characters: \'함수\'', type: 'Literal' }] },
-    { code: 'var ary = ["배열"];', errors: [{ message: 'Using Korean characters: "배열"', type: 'Literal' }] },
+    {
+      code: 'console.log(\'english\' + \'한국어\');',
+      errors: [{ message: 'Using Korean characters: \'한국어\'', type: 'Literal' }]
+    },
+    {
+      code: 'var str = \'문자열\'.substr(0, 1);',
+      errors: [{ message: 'Using Korean characters: \'문자열\'', type: 'Literal' }]
+    },
+    {
+      code: 'var obj = { \'key\': \'사물\' };',
+      errors: [{ message: 'Using Korean characters: \'사물\'', type: 'Literal' }]
+    },
+    {
+      code: 'var func = function(v){return v;}; func(\'함수\');',
+      errors: [{ message: 'Using Korean characters: \'함수\'', type: 'Literal' }]
+    },
+    {
+      code: 'var ary = ["배열"];',
+      errors: [{ message: 'Using Korean characters: "배열"', type: 'Literal' }]
+    },
+    {
+      code: `
+        import 식별자0 from 'xyz';
+        식별자1 = { 식별자2: 0 };
+        var 식별자3 = function 식별자4() {};
+        this.식별자5 = 0;
+        a[식별자6] = 0;
+        export default 식별자7;
+      `,
+      parserOptions: {
+        ecmaVersion: 6,
+        sourceType: 'module',
+      },
+      options: [{
+        includeIdentifier: true,
+      }],
+      errors: [{
+        message: 'Using Korean characters: 식별자0',
+        type: 'Identifier',
+      }, {
+        message: 'Using Korean characters: 식별자1',
+        type: 'Identifier',
+      }, {
+        message: 'Using Korean characters: 식별자2',
+        type: 'Identifier',
+      }, {
+        message: 'Using Korean characters: 식별자3',
+        type: 'Identifier',
+      }, {
+        message: 'Using Korean characters: 식별자4',
+        type: 'Identifier',
+      }, {
+        message: 'Using Korean characters: 식별자5',
+        type: 'Identifier',
+      }, {
+        message: 'Using Korean characters: 식별자6',
+        type: 'Identifier',
+      }, {
+        message: 'Using Korean characters: 식별자7',
+        type: 'Identifier',
+      }],
+    },
   ],
 });
