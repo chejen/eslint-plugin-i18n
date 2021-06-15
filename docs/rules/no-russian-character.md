@@ -19,3 +19,17 @@ var str = "English";
 
 var str = this.getIntlMessage("i18n.key"); // using an i18n tool instead of regular Russian characters
 ```
+
+## Rule Options
+
+The rule takes one option, an object, which has one key `includeIdentifier` having boolean values `true` or `false`.
+* In general, we don't check identifiers for l10n/i18n. If you would like to lint them, set `includeIdentifier` as `true` to enforce checking.
+
+```json
+"i18n/no-russian-character": [
+  "warn",
+  {
+    "includeIdentifier": true
+  }
+]
+```
