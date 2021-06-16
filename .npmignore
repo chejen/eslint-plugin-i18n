@@ -1,4 +1,7 @@
+.github
+.nyc_output
 coverage
 tests
 .editorconfig
-.travis.yml
+.eslintignore
+.eslintrc
