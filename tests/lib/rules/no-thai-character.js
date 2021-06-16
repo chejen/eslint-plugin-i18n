@@ -62,23 +62,23 @@ ruleTester.run('no-thai-character', rule, {
     },
     {
       code: 'console.log(\'english\' + \'ไทย\');',
-      errors: [{ message: 'Using Thai characters: \'ไทย\'', type: 'Literal' }]
+      errors: [{ message: 'Using Thai characters: \'ไทย\'', type: 'Literal' }],
     },
     {
       code: 'var str = \'ตัวแปร\'.substr(0, 1);',
-      errors: [{ message: 'Using Thai characters: \'ตัวแปร\'', type: 'Literal' }]
+      errors: [{ message: 'Using Thai characters: \'ตัวแปร\'', type: 'Literal' }],
     },
     {
       code: 'var obj = { \'key\': \'วัตถุ\' };',
-      errors: [{ message: 'Using Thai characters: \'วัตถุ\'', type: 'Literal' }]
+      errors: [{ message: 'Using Thai characters: \'วัตถุ\'', type: 'Literal' }],
     },
     {
       code: 'var func = function(v){return v;}; func(\'ฟังก์ชัน\');',
-      errors: [{ message: 'Using Thai characters: \'ฟังก์ชัน\'', type: 'Literal' }]
+      errors: [{ message: 'Using Thai characters: \'ฟังก์ชัน\'', type: 'Literal' }],
     },
     {
       code: 'var ary = ["อาร์เรย์"];',
-      errors: [{ message: 'Using Thai characters: "อาร์เรย์"', type: 'Literal' }]
+      errors: [{ message: 'Using Thai characters: "อาร์เรย์"', type: 'Literal' }],
     },
     {
       code: `
