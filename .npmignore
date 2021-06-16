@@ -1,4 +1,5 @@
 .github
+.husky
 .nyc_output
 coverage
 tests
