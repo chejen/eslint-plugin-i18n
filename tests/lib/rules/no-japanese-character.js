@@ -60,28 +60,28 @@ ruleTester.run('no-japanese-character', rule, {
       env: { es6: true },
       errors: [{
         message: 'Using Japanese characters: テンプレート文字列',
-        type: 'TemplateElement'
+        type: 'TemplateElement',
       }],
     },
     {
       code: 'console.log(\'english\' + \'日本語\');',
-      errors: [{ message: 'Using Japanese characters: \'日本語\'', type: 'Literal' }]
+      errors: [{ message: 'Using Japanese characters: \'日本語\'', type: 'Literal' }],
     },
     {
       code: 'var str = \'ストリング\'.substr(0, 1);',
-      errors: [{ message: 'Using Japanese characters: \'ストリング\'', type: 'Literal' }]
+      errors: [{ message: 'Using Japanese characters: \'ストリング\'', type: 'Literal' }],
     },
     {
       code: 'var obj = { \'key\': \'オブジェクト\' };',
-      errors: [{ message: 'Using Japanese characters: \'オブジェクト\'', type: 'Literal' }]
+      errors: [{ message: 'Using Japanese characters: \'オブジェクト\'', type: 'Literal' }],
     },
     {
       code: 'var func = function(v){return v;}; func(\'関数\');',
-      errors: [{ message: 'Using Japanese characters: \'関数\'', type: 'Literal' }]
+      errors: [{ message: 'Using Japanese characters: \'関数\'', type: 'Literal' }],
     },
     {
       code: 'var ary = ["配列"];',
-      errors: [{ message: 'Using Japanese characters: "配列"', type: 'Literal' }]
+      errors: [{ message: 'Using Japanese characters: "配列"', type: 'Literal' }],
     },
     {
       code: `

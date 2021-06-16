@@ -62,23 +62,23 @@ ruleTester.run('no-greek-character', rule, {
     },
     {
       code: 'console.log(\'english\' + \'Ελληνικά\');',
-      errors: [{ message: 'Using Greek characters: \'Ελληνικά\'', type: 'Literal' }]
+      errors: [{ message: 'Using Greek characters: \'Ελληνικά\'', type: 'Literal' }],
     },
     {
       code: 'var str = \'συμβολοσειρές\'.substr(0, 1);',
-      errors: [{ message: 'Using Greek characters: \'συμβολοσειρές\'', type: 'Literal' }]
+      errors: [{ message: 'Using Greek characters: \'συμβολοσειρές\'', type: 'Literal' }],
     },
     {
       code: 'var obj = { \'key\': \'αντικείμενο\' };',
-      errors: [{ message: 'Using Greek characters: \'αντικείμενο\'', type: 'Literal' }]
+      errors: [{ message: 'Using Greek characters: \'αντικείμενο\'', type: 'Literal' }],
     },
     {
       code: 'var func = function(v){return v;}; func(\'λειτουργία\');',
-      errors: [{ message: 'Using Greek characters: \'λειτουργία\'', type: 'Literal' }]
+      errors: [{ message: 'Using Greek characters: \'λειτουργία\'', type: 'Literal' }],
     },
     {
       code: 'var ary = ["πίνακας"];',
-      errors: [{ message: 'Using Greek characters: "πίνακας"', type: 'Literal' }]
+      errors: [{ message: 'Using Greek characters: "πίνακας"', type: 'Literal' }],
     },
     {
       code: `
