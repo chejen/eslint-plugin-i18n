@@ -9,7 +9,12 @@ jobs:
       matrix:
         node-version: [12.x, 14.x, 16.x]
     steps:
-      - uses: actions/checkout@v2
+      - name: Set git to use LF
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
+      - name: Check out the code
+        uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
