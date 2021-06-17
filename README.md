@@ -1,7 +1,8 @@
 [![NPM License][npm-license-image]][npm-license-url]
 [![NPM Version][npm-version-image]][npm-version-url]
 [![NPM Downloads][npm-downloads-image]][npm-downloads-url]
-[![Build Status][travis-image]][travis-url]
+[![Ubuntu CI Status][github-actions-linux-image]][github-actions-linux-url]
+[![Windows CI Status][github-actions-win-image]][github-actions-win-url]
 [![Coverage Status][codecov-image]][codecov-url]
 
 [npm-license-image]: https://img.shields.io/npm/l/eslint-plugin-i18n.svg
@@ -10,10 +11,12 @@
 [npm-version-url]: https://www.npmjs.com/package/eslint-plugin-i18n
 [npm-downloads-image]: https://img.shields.io/npm/dt/eslint-plugin-i18n.svg
 [npm-downloads-url]: https://www.npmjs.com/package/eslint-plugin-i18n
-[travis-image]: https://img.shields.io/travis/chejen/eslint-plugin-i18n.svg
-[travis-url]: https://travis-ci.org/chejen/eslint-plugin-i18n
-[codecov-image]: https://codecov.io/github/chejen/eslint-plugin-i18n/coverage.svg?branch=master
-[codecov-url]: https://codecov.io/github/chejen/eslint-plugin-i18n?branch=master
+[github-actions-linux-image]: https://github.com/chejen/eslint-plugin-i18n/actions/workflows/linux.yml/badge.svg
+[github-actions-linux-url]: https://github.com/chejen/eslint-plugin-i18n/actions/workflows/linux.yml
+[github-actions-win-image]: https://github.com/chejen/eslint-plugin-i18n/actions/workflows/windows.yml/badge.svg
+[github-actions-win-url]: https://github.com/chejen/eslint-plugin-i18n/actions/workflows/windows.yml
+[codecov-image]: https://codecov.io/github/chejen/eslint-plugin-i18n/branch/master/graph/badge.svg?branch=master
+[codecov-url]: https://app.codecov.io/gh/chejen/eslint-plugin-i18n?branch=master
 
 
 eslint-plugin-i18n
@@ -79,6 +82,10 @@ eslint-plugin-i18n is licensed under the [MIT License](http://www.opensource.org
 
 
 # Changelog
+
+## v2.1.0 - June 17, 2021
+- Added rule options to support identifier linting.
+- Dropped the support of node < 12 for development environment (due to lint-staged and mocha)
 
 ## v2.0.0 - July 4, 2020
 - Dropped support for node < 10
