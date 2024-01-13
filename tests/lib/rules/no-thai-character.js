@@ -122,5 +122,21 @@ ruleTester.run('no-thai-character', rule, {
         type: 'Identifier',
       }],
     },
+    {
+      code: `
+        // ความคิดเห็นบรรทัดเดียว
+        /* หลายสายความคิดเห็น */
+      `,
+      options: [{
+        includeComment: true,
+      }],
+      errors: [{
+        message: 'Using Thai characters: ความคิดเห็นบรรทัดเดียว',
+        type: 'Line',
+      }, {
+        message: 'Using Thai characters: หลายสายความคิดเห็น',
+        type: 'Block',
+      }],
+    },
   ],
 });

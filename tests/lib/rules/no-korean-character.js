@@ -122,5 +122,21 @@ ruleTester.run('no-korean-character', rule, {
         type: 'Identifier',
       }],
     },
+    {
+      code: `
+        // 한 줄 댓글
+        /* 멀티 라인 댓글 */
+      `,
+      options: [{
+        includeComment: true,
+      }],
+      errors: [{
+        message: 'Using Korean characters: 한 줄 댓글',
+        type: 'Line',
+      }, {
+        message: 'Using Korean characters: 멀티 라인 댓글',
+        type: 'Block',
+      }],
+    },
   ],
 });

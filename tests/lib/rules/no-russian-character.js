@@ -141,5 +141,21 @@ ruleTester.run('no-russian-character', rule, {
         type: 'Identifier',
       }],
     },
+    {
+      code: `
+        // Комментарий, занимающий одну строку.
+        /* Комментарий, занимающий несколько строк. */
+      `,
+      options: [{
+        includeComment: true,
+      }],
+      errors: [{
+        message: 'Using Russian characters: Комментарий, занимающий одну строку.',
+        type: 'Line',
+      }, {
+        message: 'Using Russian characters: Комментарий, занимающий несколько строк.',
+        type: 'Block',
+      }],
+    },
   ],
 });
