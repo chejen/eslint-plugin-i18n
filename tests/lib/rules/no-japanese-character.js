@@ -125,5 +125,21 @@ ruleTester.run('no-japanese-character', rule, {
         type: 'Identifier',
       }],
     },
+    {
+      code: `
+        // 単一行コメント
+        /* マルチラインのコメント */
+      `,
+      options: [{
+        includeComment: true,
+      }],
+      errors: [{
+        message: 'Using Japanese characters: 単一行コメント',
+        type: 'Line',
+      }, {
+        message: 'Using Japanese characters: マルチラインのコメント',
+        type: 'Block',
+      }],
+    },
   ],
 });

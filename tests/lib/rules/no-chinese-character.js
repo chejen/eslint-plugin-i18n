@@ -142,5 +142,21 @@ ruleTester.run('no-chinese-character', rule, {
         type: 'Identifier',
       }],
     },
+    {
+      code: `
+        // 注解0
+        /* 注释1 */
+      `,
+      options: [{
+        includeComment: true,
+      }],
+      errors: [{
+        message: 'Using Chinese characters: 注解0',
+        type: 'Line',
+      }, {
+        message: 'Using Chinese characters: 注释1',
+        type: 'Block',
+      }],
+    },
   ],
 });

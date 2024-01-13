@@ -122,5 +122,21 @@ ruleTester.run('no-greek-character', rule, {
         type: 'Identifier',
       }],
     },
+    {
+      code: `
+        // Σχόλιο μονής γραμμής
+        /* Σχολιασμός πολλαπλών γραμμών */
+      `,
+      options: [{
+        includeComment: true,
+      }],
+      errors: [{
+        message: 'Using Greek characters: Σχόλιο μονής γραμμής',
+        type: 'Line',
+      }, {
+        message: 'Using Greek characters: Σχολιασμός πολλαπλών γραμμών',
+        type: 'Block',
+      }],
+    },
   ],
 });
