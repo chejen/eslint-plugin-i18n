@@ -22,9 +22,9 @@ var str = this.getIntlMessage("i18n.key"); // using an i18n tool instead of regu
 
 ## Rule Options
 
-The rule takes one option, an object, which has several keys with boolean values `true` or `false`.
+The rule takes an object option with the following keys:
 
-### includeIdentifier
+### {boolean} `includeIdentifier`
 
 * In general, we don't check identifiers for l10n/i18n. If you would like to lint them, set `includeIdentifier` as `true` to enforce checking.
 
@@ -37,9 +37,9 @@ The rule takes one option, an object, which has several keys with boolean values
 ]
 ```
 
-### includeComment
+### {boolean} `includeComment`
 
-* In general, we don't check comments for l10n/i18n. If you would like to lint them, set `includeComment` as `true` to enforce checking.
+* It's also not common to check comments for l10n/i18n, but you can set `includeComment` as `true` to enforce checking.
 
 ```json
 "i18n/no-korean-character": [
