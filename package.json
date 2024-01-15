@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-i18n",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Internationalization's linting rules for ESLint",
   "keywords": [
     "eslint",
@@ -26,19 +26,18 @@
     "url": "https://github.com/chejen/eslint-plugin-i18n"
   },
   "devDependencies": {
-    "codecov": "^3.8.2",
-    "eslint": "^7.28.0",
+    "codecov": "^3.8.3",
+    "eslint": "^8.56.0",
     "eslint-config-google": "~0.14.0",
-    "husky": "^6.0.0",
-    "lint-staged": "^11.0.0",
-    "mocha": "^9.0.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.0",
+    "mocha": "^10.2.0",
     "nyc": "^15.1.0"
   },
   "lint-staged": {
     "*.js": [
       "npm test",
-      "eslint --fix",
-      "git add"
+      "eslint --fix"
     ]
   },
   "engines": {

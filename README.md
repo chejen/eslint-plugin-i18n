@@ -83,6 +83,9 @@ eslint-plugin-i18n is licensed under the [MIT License](http://www.opensource.org
 
 # Changelog
 
+## v2.2.0 - January 16, 2024
+- Added rule options to support comments linting.
+
 ## v2.1.0 - June 17, 2021
 - Added rule options to support identifier linting.
 - Dropped the support of node < 12 for development environment (due to lint-staged and mocha)
