@@ -40,6 +40,27 @@ ruleTester.run('no-chinese-character', rule, {
         sourceType: 'module',
       },
     },
+    {
+      code: 'var func = function(v){return v;}; var tpl = <Hello>{dic(\'函式\')}</Hello>;',
+      options: [{
+        excludeArgsForFunctions: ['dic'],
+      }],
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+    },
+    {
+      code: 'var tl = dic(`樣板字串`)',
+      options: [{
+        excludeArgsForFunctions: ['dic'],
+      }],
+      parserOptions: {
+        ecmaVersion: 6,
+        sourceType: 'module',
+      },
+    },
   ],
   invalid: [
     {
@@ -56,12 +77,37 @@ ruleTester.run('no-chinese-character', rule, {
       }],
     },
     {
+      code: 'var func = function(v){return v;}; var tpl = <Hello>{func(\'函式\')}</Hello>;',
+      options: [{
+        excludeArgsForFunctions: ['dic'],
+      }],
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+      errors: [{
+        message: 'Using Chinese characters: \'函式\'', type: 'Literal',
+      }],
+    },
+    {
       code: 'var str = `樣板字串`; console.log(`${str}、模板字符串`);',
       env: { es6: true },
       errors: [{
         message: 'Using Chinese characters: 樣板字串', type: 'TemplateElement',
       }, {
         message: 'Using Chinese characters: 、模板字符串', type: 'TemplateElement',
+      }],
+    },
+    {
+      code: 'var tl = func(`樣板字串`)',
+      env: { es6: true },
+      options: [{
+        excludeArgsForFunctions: ['dic'],
+      }],
+      errors: [{
+        message: 'Using Chinese characters: 樣板字串',
+        type: 'TemplateElement',
       }],
     },
     {

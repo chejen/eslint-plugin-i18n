@@ -40,6 +40,27 @@ ruleTester.run('no-thai-character', rule, {
         sourceType: 'module',
       },
     },
+    {
+      code: 'var func = function(v){return v;}; var tpl = <Hello>{dic(\'ฟังก์ชัน\')}</Hello>;',
+      options: [{
+        excludeArgsForFunctions: ['dic'],
+      }],
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+    },
+    {
+      code: 'var tl = dic(`อักษรแม่แบบ`)',
+      options: [{
+        excludeArgsForFunctions: ['dic'],
+      }],
+      parserOptions: {
+        ecmaVersion: 6,
+        sourceType: 'module',
+      },
+    },
   ],
   invalid: [
     {
@@ -56,9 +77,34 @@ ruleTester.run('no-thai-character', rule, {
       }],
     },
     {
+      code: 'var func = function(v){return v;}; var tpl = <Hello>{func(\'ฟังก์ชัน\')}</Hello>;',
+      options: [{
+        excludeArgsForFunctions: ['dic'],
+      }],
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+      errors: [{
+        message: 'Using Thai characters: \'ฟังก์ชัน\'', type: 'Literal',
+      }],
+    },
+    {
       code: 'var tl = `อักษรแม่แบบ`',
       env: { es6: true },
       errors: [{ message: 'Using Thai characters: อักษรแม่แบบ', type: 'TemplateElement' }],
+    },
+    {
+      code: 'var tl = func(`อักษรแม่แบบ`)',
+      env: { es6: true },
+      options: [{
+        excludeArgsForFunctions: ['dic'],
+      }],
+      errors: [{
+        message: 'Using Thai characters: อักษรแม่แบบ',
+        type: 'TemplateElement',
+      }],
     },
     {
       code: 'console.log(\'english\' + \'ไทย\');',

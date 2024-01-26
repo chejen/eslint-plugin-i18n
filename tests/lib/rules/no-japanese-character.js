@@ -40,6 +40,27 @@ ruleTester.run('no-japanese-character', rule, {
         sourceType: 'module',
       },
     },
+    {
+      code: 'var func = function(v){return v;}; var tpl = <Hello>{dic(\'関数\')}</Hello>;',
+      options: [{
+        excludeArgsForFunctions: ['dic'],
+      }],
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+    },
+    {
+      code: 'var tl = dic(`テンプレート文字列`)',
+      options: [{
+        excludeArgsForFunctions: ['dic'],
+      }],
+      parserOptions: {
+        ecmaVersion: 6,
+        sourceType: 'module',
+      },
+    },
   ],
   invalid: [
     {
@@ -56,8 +77,33 @@ ruleTester.run('no-japanese-character', rule, {
       }],
     },
     {
+      code: 'var func = function(v){return v;}; var tpl = <Hello>{func(\'関数\')}</Hello>;',
+      options: [{
+        excludeArgsForFunctions: ['dic'],
+      }],
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+      errors: [{
+        message: 'Using Japanese characters: \'関数\'', type: 'Literal',
+      }],
+    },
+    {
       code: 'var tl = `テンプレート文字列`',
       env: { es6: true },
+      errors: [{
+        message: 'Using Japanese characters: テンプレート文字列',
+        type: 'TemplateElement',
+      }],
+    },
+    {
+      code: 'var tl = func(`テンプレート文字列`)',
+      env: { es6: true },
+      options: [{
+        excludeArgsForFunctions: ['dic'],
+      }],
       errors: [{
         message: 'Using Japanese characters: テンプレート文字列',
         type: 'TemplateElement',

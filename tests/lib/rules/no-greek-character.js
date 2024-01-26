@@ -40,6 +40,27 @@ ruleTester.run('no-greek-character', rule, {
         sourceType: 'module',
       },
     },
+    {
+      code: 'var func = function(v){return v;}; var tpl = <Hello>{dic(\'λειτουργία\')}</Hello>;',
+      options: [{
+        excludeArgsForFunctions: ['dic'],
+      }],
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+    },
+    {
+      code: 'var tl = dic(`συμβολοσειρές`)',
+      options: [{
+        excludeArgsForFunctions: ['dic'],
+      }],
+      parserOptions: {
+        ecmaVersion: 6,
+        sourceType: 'module',
+      },
+    },
   ],
   invalid: [
     {
@@ -56,9 +77,34 @@ ruleTester.run('no-greek-character', rule, {
       }],
     },
     {
+      code: 'var func = function(v){return v;}; var tpl = <Hello>{func(\'λειτουργία\')}</Hello>;',
+      options: [{
+        excludeArgsForFunctions: ['dic'],
+      }],
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+      errors: [{
+        message: 'Using Greek characters: \'λειτουργία\'', type: 'Literal',
+      }],
+    },
+    {
       code: 'var str = `συμβολοσειρές`',
       env: { es6: true },
       errors: [{ message: 'Using Greek characters: συμβολοσειρές', type: 'TemplateElement' }],
+    },
+    {
+      code: 'var tl = func(`συμβολοσειρές`)',
+      env: { es6: true },
+      options: [{
+        excludeArgsForFunctions: ['dic'],
+      }],
+      errors: [{
+        message: 'Using Greek characters: συμβολοσειρές',
+        type: 'TemplateElement',
+      }],
     },
     {
       code: 'console.log(\'english\' + \'Ελληνικά\');',

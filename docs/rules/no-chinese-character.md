@@ -49,3 +49,16 @@ The rule takes an object option with the following keys:
   }
 ]
 ```
+
+### {array} `excludeArgsForFunctions`
+
+* We exclude from the check the functions specified in the `excludeArgsForFunctions` option.
+
+```json
+"i18n/no-chinese-character": [
+  "warn",
+  {
+    "excludeArgsForFunctions": ["i18n", "l10n"]
+  }
+]
+```
