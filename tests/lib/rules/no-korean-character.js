@@ -40,6 +40,27 @@ ruleTester.run('no-korean-character', rule, {
         sourceType: 'module',
       },
     },
+    {
+      code: 'var func = function(v){return v;}; var tpl = <Hello>{dic(\'함수\')}</Hello>;',
+      options: [{
+        excludeArgsForFunctions: ['dic'],
+      }],
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+    },
+    {
+      code: 'var tl = dic(`템플릿 문자열`)',
+      options: [{
+        excludeArgsForFunctions: ['dic'],
+      }],
+      parserOptions: {
+        ecmaVersion: 6,
+        sourceType: 'module',
+      },
+    },
   ],
   invalid: [
     {
@@ -56,9 +77,34 @@ ruleTester.run('no-korean-character', rule, {
       }],
     },
     {
+      code: 'var func = function(v){return v;}; var tpl = <Hello>{func(\'함수\')}</Hello>;',
+      options: [{
+        excludeArgsForFunctions: ['dic'],
+      }],
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+      errors: [{
+        message: 'Using Korean characters: \'함수\'', type: 'Literal',
+      }],
+    },
+    {
       code: 'var tl = `템플릿 문자열`',
       env: { es6: true },
       errors: [{ message: 'Using Korean characters: 템플릿 문자열', type: 'TemplateElement' }],
+    },
+    {
+      code: 'var tl = func(`템플릿 문자열`)',
+      env: { es6: true },
+      options: [{
+        excludeArgsForFunctions: ['dic'],
+      }],
+      errors: [{
+        message: 'Using Korean characters: 템플릿 문자열',
+        type: 'TemplateElement',
+      }],
     },
     {
       code: 'console.log(\'english\' + \'한국어\');',

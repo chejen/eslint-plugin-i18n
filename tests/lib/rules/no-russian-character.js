@@ -40,6 +40,27 @@ ruleTester.run('no-russian-character', rule, {
         sourceType: 'module',
       },
     },
+    {
+      code: 'var func = function(v){return v;}; var tpl = <Hello>{dic(\'Функции\')}</Hello>;',
+      options: [{
+        excludeArgsForFunctions: ['dic'],
+      }],
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+    },
+    {
+      code: 'var tl = dic(`Шаблонные строки`)',
+      options: [{
+        excludeArgsForFunctions: ['dic'],
+      }],
+      parserOptions: {
+        ecmaVersion: 6,
+        sourceType: 'module',
+      },
+    },
   ],
   invalid: [
     {
@@ -56,8 +77,33 @@ ruleTester.run('no-russian-character', rule, {
       }],
     },
     {
+      code: 'var func = function(v){return v;}; var tpl = <Hello>{func(\'Функции\')}</Hello>;',
+      options: [{
+        excludeArgsForFunctions: ['dic'],
+      }],
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+      errors: [{
+        message: 'Using Russian characters: \'Функции\'', type: 'Literal',
+      }],
+    },
+    {
       code: 'var tl = `Шаблонные строки`',
       env: { es6: true },
+      errors: [{
+        message: 'Using Russian characters: Шаблонные строки',
+        type: 'TemplateElement',
+      }],
+    },
+    {
+      code: 'var tl = func(`Шаблонные строки`)',
+      env: { es6: true },
+      options: [{
+        excludeArgsForFunctions: ['dic'],
+      }],
       errors: [{
         message: 'Using Russian characters: Шаблонные строки',
         type: 'TemplateElement',
