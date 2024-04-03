@@ -61,6 +61,15 @@ ruleTester.run('no-chinese-character', rule, {
         sourceType: 'module',
       },
     },
+    {
+      code: 'const tl = i18n.t(`樣板字串`);',
+      options: [{
+        excludeArgsForFunctions: ['i18n.t'],
+      }],
+      parserOptions: {
+        ecmaVersion: 6,
+      },
+    },
   ],
   invalid: [
     {

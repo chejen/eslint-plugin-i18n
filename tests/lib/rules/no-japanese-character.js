@@ -61,6 +61,15 @@ ruleTester.run('no-japanese-character', rule, {
         sourceType: 'module',
       },
     },
+    {
+      code: 'const tl = i18n.t("関数");',
+      options: [{
+        excludeArgsForFunctions: ['i18n.t'],
+      }],
+      parserOptions: {
+        ecmaVersion: 6,
+      },
+    },
   ],
   invalid: [
     {
