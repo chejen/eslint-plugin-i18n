@@ -58,7 +58,7 @@ The rule takes an object option with the following keys:
 "i18n/no-korean-character": [
   "warn",
   {
-    "excludeArgsForFunctions": ["i18n", "l10n"]
+    "excludeArgsForFunctions": ["i18n", "l10n", "i18n.t"]
   }
 ]
 ```

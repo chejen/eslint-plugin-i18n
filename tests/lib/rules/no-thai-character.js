@@ -61,6 +61,15 @@ ruleTester.run('no-thai-character', rule, {
         sourceType: 'module',
       },
     },
+    {
+      code: 'const tl = i18n.t("ตัวระบุ7");',
+      options: [{
+        excludeArgsForFunctions: ['i18n.t'],
+      }],
+      parserOptions: {
+        ecmaVersion: 6,
+      },
+    },
   ],
   invalid: [
     {

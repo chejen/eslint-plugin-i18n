@@ -61,6 +61,15 @@ ruleTester.run('no-greek-character', rule, {
         sourceType: 'module',
       },
     },
+    {
+      code: 'const tl = i18n.t("συμβολοσειρές");',
+      options: [{
+        excludeArgsForFunctions: ['i18n.t'],
+      }],
+      parserOptions: {
+        ecmaVersion: 6,
+      },
+    },
   ],
   invalid: [
     {

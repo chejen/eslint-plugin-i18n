@@ -58,6 +58,15 @@ ruleTester.run('no-korean-character', rule, {
       }],
       parserOptions: {
         ecmaVersion: 6,
+      },
+    },
+    {
+      code: 'const tl = i18n.t("템플릿 문자열");',
+      options: [{
+        excludeArgsForFunctions: ['i18n.t'],
+      }],
+      parserOptions: {
+        ecmaVersion: 6,
         sourceType: 'module',
       },
     },

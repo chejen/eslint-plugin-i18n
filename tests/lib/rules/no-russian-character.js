@@ -61,6 +61,15 @@ ruleTester.run('no-russian-character', rule, {
         sourceType: 'module',
       },
     },
+    {
+      code: 'const tl = i18n.t("Идентификатор3");',
+      options: [{
+        excludeArgsForFunctions: ['i18n.t'],
+      }],
+      parserOptions: {
+        ecmaVersion: 6,
+      },
+    },
   ],
   invalid: [
     {
