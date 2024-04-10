@@ -83,6 +83,9 @@ eslint-plugin-i18n is licensed under the [MIT License](http://www.opensource.org
 
 # Changelog
 
+## v2.3.1 - April 10, 2024
+- Extended the ability of `excludeArgsForFunctions` option.
+
 ## v2.3.0 - January 26, 2024
 - Added rule options to exclude some function arguments from linting.
 
