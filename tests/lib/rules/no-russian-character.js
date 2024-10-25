@@ -41,9 +41,9 @@ ruleTester.run('no-russian-character', rule, {
       },
     },
     {
-      code: 'var func = function(v){return v;}; var tpl = <Hello>{dic(\'Функции\')}</Hello>;',
+      code: 'var value = a.b.c.d(\'Строки\'); var tpl = <Hello>{dic(\'Строки\')}</Hello>;',
       options: [{
-        excludeArgsForFunctions: ['dic'],
+        excludeArgsForFunctions: ['a.b.c.d', 'dic'],
       }],
       parserOptions: {
         ecmaFeatures: {
@@ -52,23 +52,23 @@ ruleTester.run('no-russian-character', rule, {
       },
     },
     {
-      code: 'var tl = dic(`Шаблонные строки`)',
+      code: 'var value1 = dic(`Шаблонные строки`), value2 = i18n.t(`Шаблонные строки`), value3 = x.y.z(`Шаблонные строки`)',
       options: [{
-        excludeArgsForFunctions: ['dic'],
+        excludeArgsForFunctions: ['dic', 'i18n.t', 'x.y.z'],
       }],
       parserOptions: {
         ecmaVersion: 6,
-        sourceType: 'module',
       },
     },
     {
-      code: 'const tl = i18n.t("Идентификатор3");',
+      code: `
+        var value1 = i18n.t("код" + "ошибки");
+        var value2 = i18n.t(isValid ? "действительный" : "неверный");
+        var value3 = i18n.t(key || "значение по умолчанию");
+      `,
       options: [{
         excludeArgsForFunctions: ['i18n.t'],
       }],
-      parserOptions: {
-        ecmaVersion: 6,
-      },
     },
   ],
   invalid: [

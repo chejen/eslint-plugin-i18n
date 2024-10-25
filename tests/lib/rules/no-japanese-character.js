@@ -41,9 +41,9 @@ ruleTester.run('no-japanese-character', rule, {
       },
     },
     {
-      code: 'var func = function(v){return v;}; var tpl = <Hello>{dic(\'関数\')}</Hello>;',
+      code: 'var value = a.b.c.d(\'文字列\'); var tpl = <Hello>{dic(\'文字列\')}</Hello>;',
       options: [{
-        excludeArgsForFunctions: ['dic'],
+        excludeArgsForFunctions: ['a.b.c.d', 'dic'],
       }],
       parserOptions: {
         ecmaFeatures: {
@@ -52,23 +52,23 @@ ruleTester.run('no-japanese-character', rule, {
       },
     },
     {
-      code: 'var tl = dic(`テンプレート文字列`)',
+      code: 'var value1 = dic(`テンプレートリテラル`), value2 = i18n.t(`テンプレートリテラル`), value3 = x.y.z(`テンプレートリテラル`)',
       options: [{
-        excludeArgsForFunctions: ['dic'],
+        excludeArgsForFunctions: ['dic', 'i18n.t', 'x.y.z'],
       }],
       parserOptions: {
         ecmaVersion: 6,
-        sourceType: 'module',
       },
     },
     {
-      code: 'const tl = i18n.t("関数");',
+      code: `
+        var value1 = i18n.t("エラー" + "コード");
+        var value2 = i18n.t(isValid ? "有効" : "無効");
+        var value3 = i18n.t(key || "既定値");
+      `,
       options: [{
         excludeArgsForFunctions: ['i18n.t'],
       }],
-      parserOptions: {
-        ecmaVersion: 6,
-      },
     },
   ],
   invalid: [

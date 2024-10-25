@@ -41,9 +41,9 @@ ruleTester.run('no-thai-character', rule, {
       },
     },
     {
-      code: 'var func = function(v){return v;}; var tpl = <Hello>{dic(\'ฟังก์ชัน\')}</Hello>;',
+      code: 'var value = a.b.c.d(\'อักขระ\'); var tpl = <Hello>{dic(\'อักขระ\')}</Hello>;',
       options: [{
-        excludeArgsForFunctions: ['dic'],
+        excludeArgsForFunctions: ['a.b.c.d', 'dic'],
       }],
       parserOptions: {
         ecmaFeatures: {
@@ -52,23 +52,23 @@ ruleTester.run('no-thai-character', rule, {
       },
     },
     {
-      code: 'var tl = dic(`อักษรแม่แบบ`)',
+      code: 'var value1 = dic(`อักขระ`), value2 = i18n.t(`อักขระ`), value3 = x.y.z(`อักขระ`)',
       options: [{
-        excludeArgsForFunctions: ['dic'],
+        excludeArgsForFunctions: ['dic', 'i18n.t', 'x.y.z'],
       }],
       parserOptions: {
         ecmaVersion: 6,
-        sourceType: 'module',
       },
     },
     {
-      code: 'const tl = i18n.t("ตัวระบุ7");',
+      code: `
+        var value1 = i18n.t("เมื่อการยืนยันตัวตนล้มเหลว" + "จะมีข้อความ");
+        var value2 = i18n.t(isValid ? "ถูกต้อง" : "ไม่ถูกต้อง");
+        var value3 = i18n.t(key || "ค่าเริ่มต้น");
+      `,
       options: [{
         excludeArgsForFunctions: ['i18n.t'],
       }],
-      parserOptions: {
-        ecmaVersion: 6,
-      },
     },
   ],
   invalid: [

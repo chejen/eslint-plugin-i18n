@@ -41,9 +41,9 @@ ruleTester.run('no-chinese-character', rule, {
       },
     },
     {
-      code: 'var func = function(v){return v;}; var tpl = <Hello>{dic(\'函式\')}</Hello>;',
+      code: 'var value = a.b.c.d(\'字串\'); var tpl = <Hello>{dic(\'函式\')}</Hello>;',
       options: [{
-        excludeArgsForFunctions: ['dic'],
+        excludeArgsForFunctions: ['a.b.c.d', 'dic'],
       }],
       parserOptions: {
         ecmaFeatures: {
@@ -52,23 +52,23 @@ ruleTester.run('no-chinese-character', rule, {
       },
     },
     {
-      code: 'var tl = dic(`樣板字串`)',
+      code: 'var value1 = dic(`樣板字串`); var value2 = i18n.t("字符串"); var value3 = w.x.y.z("字符串")',
       options: [{
-        excludeArgsForFunctions: ['dic'],
+        excludeArgsForFunctions: ['dic', 'i18n.t', 'w.x.y.z'],
       }],
       parserOptions: {
         ecmaVersion: 6,
-        sourceType: 'module',
       },
     },
     {
-      code: 'const tl = i18n.t(`樣板字串`);',
+      code: `
+        var value1 = i18n.t("模板" + "字符串");
+        var value2 = i18n.t(isValid ? "模板" : "字符串");
+        var value3 = i18n.t(key || "默认值");
+      `,
       options: [{
         excludeArgsForFunctions: ['i18n.t'],
       }],
-      parserOptions: {
-        ecmaVersion: 6,
-      },
     },
   ],
   invalid: [

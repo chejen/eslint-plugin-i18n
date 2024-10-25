@@ -41,9 +41,9 @@ ruleTester.run('no-greek-character', rule, {
       },
     },
     {
-      code: 'var func = function(v){return v;}; var tpl = <Hello>{dic(\'λειτουργία\')}</Hello>;',
+      code: 'var value = a.b.c.d(\'Σειρά\'); var tpl = <Hello>{dic(\'Σειρά\')}</Hello>;',
       options: [{
-        excludeArgsForFunctions: ['dic'],
+        excludeArgsForFunctions: ['a.b.c.d', 'dic'],
       }],
       parserOptions: {
         ecmaFeatures: {
@@ -52,23 +52,23 @@ ruleTester.run('no-greek-character', rule, {
       },
     },
     {
-      code: 'var tl = dic(`συμβολοσειρές`)',
+      code: 'var value1 = dic(`συμβολοσειρές`), value2 = i18n.t(`συμβολοσειρές`), value3 = x.y.z(`συμβολοσειρές`)',
       options: [{
-        excludeArgsForFunctions: ['dic'],
+        excludeArgsForFunctions: ['dic', 'i18n.t', 'x.y.z'],
       }],
       parserOptions: {
         ecmaVersion: 6,
-        sourceType: 'module',
       },
     },
     {
-      code: 'const tl = i18n.t("συμβολοσειρές");',
+      code: `
+        var value1 = i18n.t("Γειά σου" + "κόσμος");
+        var value2 = i18n.t(isValid ? "έγκυρος" : "άκυρος");
+        var value3 = i18n.t(key || "προεπιλεγμένη τιμή");
+      `,
       options: [{
         excludeArgsForFunctions: ['i18n.t'],
       }],
-      parserOptions: {
-        ecmaVersion: 6,
-      },
     },
   ],
   invalid: [

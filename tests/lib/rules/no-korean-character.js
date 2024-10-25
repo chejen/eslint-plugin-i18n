@@ -41,9 +41,9 @@ ruleTester.run('no-korean-character', rule, {
       },
     },
     {
-      code: 'var func = function(v){return v;}; var tpl = <Hello>{dic(\'함수\')}</Hello>;',
+      code: 'var value = a.b.c.d(\'문자열\'); var tpl = <Hello>{dic(\'문자열\')}</Hello>;',
       options: [{
-        excludeArgsForFunctions: ['dic'],
+        excludeArgsForFunctions: ['a.b.c.d', 'dic'],
       }],
       parserOptions: {
         ecmaFeatures: {
@@ -52,23 +52,23 @@ ruleTester.run('no-korean-character', rule, {
       },
     },
     {
-      code: 'var tl = dic(`템플릿 문자열`)',
+      code: 'var value1 = dic(`템플릿 리터럴`), value2 = i18n.t(`템플릿 리터럴`), value3 = x.y.z(`템플릿 리터럴`)',
       options: [{
-        excludeArgsForFunctions: ['dic'],
+        excludeArgsForFunctions: ['dic', 'i18n.t', 'x.y.z'],
       }],
       parserOptions: {
         ecmaVersion: 6,
       },
     },
     {
-      code: 'const tl = i18n.t("템플릿 문자열");',
+      code: `
+        var value1 = i18n.t("오류" + "코드");
+        var value2 = i18n.t(isValid ? "유효한" : "유효하지 않은");
+        var value3 = i18n.t(key || "기본값");
+      `,
       options: [{
         excludeArgsForFunctions: ['i18n.t'],
       }],
-      parserOptions: {
-        ecmaVersion: 6,
-        sourceType: 'module',
-      },
     },
   ],
   invalid: [
