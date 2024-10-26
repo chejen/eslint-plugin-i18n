@@ -19,13 +19,18 @@ const RuleTester = require('eslint').RuleTester;
 const ruleTester = new RuleTester();
 ruleTester.run('no-japanese-character', rule, {
   valid: [
+    // No target language in code.
     'console.log("english");',
     {
       code: 'var str = `한국어`;',
       env: { es6: true },
     },
+
+    // Comments shouldn't be flagged.
     '// 単一行コメント',
     '/* マルチラインのコメント */',
+
+    // Identifiers shouldn't be flagged.
     {
       code: `
         import 識別子0 from 'xyz';
@@ -40,6 +45,8 @@ ruleTester.run('no-japanese-character', rule, {
         sourceType: 'module',
       },
     },
+
+    // Special case: bypass argument checks for specified functions.
     {
       code: 'var value = a.b.c.d(\'文字列\'); var tpl = <Hello>{dic(\'文字列\')}</Hello>;',
       options: [{
@@ -72,47 +79,10 @@ ruleTester.run('no-japanese-character', rule, {
     },
   ],
   invalid: [
-    {
-      code: 'var tpl = <Hello title=\'こんにちは\'>コンポーネント</Hello>',
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
-        },
-      },
-      errors: [{
-        message: 'Using Japanese characters: \'こんにちは\'', type: 'Literal',
-      }, {
-        message: 'Using Japanese characters: コンポーネント', type: 'JSXText',
-      }],
-    },
-    {
-      code: 'var func = function(v){return v;}; var tpl = <Hello>{func(\'関数\')}</Hello>;',
-      options: [{
-        excludeArgsForFunctions: ['dic'],
-      }],
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
-        },
-      },
-      errors: [{
-        message: 'Using Japanese characters: \'関数\'', type: 'Literal',
-      }],
-    },
+    // General
     {
       code: 'var tl = `テンプレート文字列`',
       env: { es6: true },
-      errors: [{
-        message: 'Using Japanese characters: テンプレート文字列',
-        type: 'TemplateElement',
-      }],
-    },
-    {
-      code: 'var tl = func(`テンプレート文字列`)',
-      env: { es6: true },
-      options: [{
-        excludeArgsForFunctions: ['dic'],
-      }],
       errors: [{
         message: 'Using Japanese characters: テンプレート文字列',
         type: 'TemplateElement',
@@ -138,6 +108,41 @@ ruleTester.run('no-japanese-character', rule, {
       code: 'var ary = ["配列"];',
       errors: [{ message: 'Using Japanese characters: "配列"', type: 'Literal' }],
     },
+
+    // JSX
+    {
+      code: 'var tpl = <Hello title=\'こんにちは\'>コンポーネント</Hello>',
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+      errors: [{
+        message: 'Using Japanese characters: \'こんにちは\'', type: 'Literal',
+      }, {
+        message: 'Using Japanese characters: コンポーネント', type: 'JSXText',
+      }],
+    },
+
+    // Special case: lint the comments as `includeComment` option enabled.
+    {
+      code: `
+        // 単一行コメント
+        /* マルチラインのコメント */
+      `,
+      options: [{
+        includeComment: true,
+      }],
+      errors: [{
+        message: 'Using Japanese characters: 単一行コメント',
+        type: 'Line',
+      }, {
+        message: 'Using Japanese characters: マルチラインのコメント',
+        type: 'Block',
+      }],
+    },
+
+    // Special case: lint identifiers as `includeIdentifier` option enabled.
     {
       code: `
         import 識別子0 from 'xyz';
@@ -180,20 +185,48 @@ ruleTester.run('no-japanese-character', rule, {
         type: 'Identifier',
       }],
     },
+
+    // Arguments without (proper) `excludeArgsForFunctions` should be flagged.
     {
-      code: `
-        // 単一行コメント
-        /* マルチラインのコメント */
-      `,
+      code: 'var tl = func(`テンプレート文字列`)',
+      env: { es6: true },
       options: [{
-        includeComment: true,
+        excludeArgsForFunctions: ['unmatchedFunction'],
       }],
       errors: [{
-        message: 'Using Japanese characters: 単一行コメント',
-        type: 'Line',
+        message: 'Using Japanese characters: テンプレート文字列',
+        type: 'TemplateElement',
+      }],
+    },
+    {
+      code: 'var value = a.b.c.d(\'関数\'); var tpl = <Hello>{dic(\'関数\')}</Hello>;',
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+      errors: [{
+        message: 'Using Japanese characters: \'関数\'', type: 'Literal',
       }, {
-        message: 'Using Japanese characters: マルチラインのコメント',
-        type: 'Block',
+        message: 'Using Japanese characters: \'関数\'', type: 'Literal',
+      }],
+    },
+    {
+      code: `
+        var value1 = i18n.t('エラー' + 'コード');
+        var value2 = i18n.t(isValid ? "有効" : "無効");
+        var value3 = i18n.t(key || "既定値");
+      `,
+      errors: [{
+        message: 'Using Japanese characters: \'エラー\'', type: 'Literal',
+      }, {
+        message: 'Using Japanese characters: \'コード\'', type: 'Literal',
+      }, {
+        message: 'Using Japanese characters: "有効"', type: 'Literal',
+      }, {
+        message: 'Using Japanese characters: "無効"', type: 'Literal',
+      }, {
+        message: 'Using Japanese characters: "既定値"', type: 'Literal',
       }],
     },
   ],

@@ -19,13 +19,18 @@ const RuleTester = require('eslint').RuleTester;
 const ruleTester = new RuleTester();
 ruleTester.run('no-thai-character', rule, {
   valid: [
+    // No target language in code.
     'console.log("english");',
     {
       code: 'var str = `中文`;',
       env: { es6: true },
     },
+
+    // Comments shouldn't be flagged.
     '// ความคิดเห็นบรรทัดเดียว',
     '/* หลายสายความคิดเห็น */',
+
+    // Identifiers shouldn't be flagged.
     {
       code: `
         import ตัวระบุ0 from 'xyz';
@@ -40,6 +45,8 @@ ruleTester.run('no-thai-character', rule, {
         sourceType: 'module',
       },
     },
+
+    // Special case: bypass argument checks for specified functions.
     {
       code: 'var value = a.b.c.d(\'อักขระ\'); var tpl = <Hello>{dic(\'อักขระ\')}</Hello>;',
       options: [{
@@ -72,48 +79,11 @@ ruleTester.run('no-thai-character', rule, {
     },
   ],
   invalid: [
-    {
-      code: 'var tpl = <Hello title=\'สวัสดี\'>คอมโพเนนท์</Hello>',
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
-        },
-      },
-      errors: [{
-        message: 'Using Thai characters: \'สวัสดี\'', type: 'Literal',
-      }, {
-        message: 'Using Thai characters: คอมโพเนนท์', type: 'JSXText',
-      }],
-    },
-    {
-      code: 'var func = function(v){return v;}; var tpl = <Hello>{func(\'ฟังก์ชัน\')}</Hello>;',
-      options: [{
-        excludeArgsForFunctions: ['dic'],
-      }],
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
-        },
-      },
-      errors: [{
-        message: 'Using Thai characters: \'ฟังก์ชัน\'', type: 'Literal',
-      }],
-    },
+    // General
     {
       code: 'var tl = `อักษรแม่แบบ`',
       env: { es6: true },
       errors: [{ message: 'Using Thai characters: อักษรแม่แบบ', type: 'TemplateElement' }],
-    },
-    {
-      code: 'var tl = func(`อักษรแม่แบบ`)',
-      env: { es6: true },
-      options: [{
-        excludeArgsForFunctions: ['dic'],
-      }],
-      errors: [{
-        message: 'Using Thai characters: อักษรแม่แบบ',
-        type: 'TemplateElement',
-      }],
     },
     {
       code: 'console.log(\'english\' + \'ไทย\');',
@@ -135,6 +105,41 @@ ruleTester.run('no-thai-character', rule, {
       code: 'var ary = ["อาร์เรย์"];',
       errors: [{ message: 'Using Thai characters: "อาร์เรย์"', type: 'Literal' }],
     },
+
+    // JSX
+    {
+      code: 'var tpl = <Hello title=\'สวัสดี\'>คอมโพเนนท์</Hello>',
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+      errors: [{
+        message: 'Using Thai characters: \'สวัสดี\'', type: 'Literal',
+      }, {
+        message: 'Using Thai characters: คอมโพเนนท์', type: 'JSXText',
+      }],
+    },
+
+    // Special case: lint the comments as `includeComment` option enabled.
+    {
+      code: `
+        // ความคิดเห็นบรรทัดเดียว
+        /* หลายสายความคิดเห็น */
+      `,
+      options: [{
+        includeComment: true,
+      }],
+      errors: [{
+        message: 'Using Thai characters: ความคิดเห็นบรรทัดเดียว',
+        type: 'Line',
+      }, {
+        message: 'Using Thai characters: หลายสายความคิดเห็น',
+        type: 'Block',
+      }],
+    },
+
+    // Special case: lint identifiers as `includeIdentifier` option enabled.
     {
       code: `
         import ตัวระบุ0 from 'xyz';
@@ -177,20 +182,48 @@ ruleTester.run('no-thai-character', rule, {
         type: 'Identifier',
       }],
     },
+
+    // Arguments without (proper) `excludeArgsForFunctions` should be flagged.
     {
-      code: `
-        // ความคิดเห็นบรรทัดเดียว
-        /* หลายสายความคิดเห็น */
-      `,
+      code: 'var tl = func(`อักษรแม่แบบ`)',
+      env: { es6: true },
       options: [{
-        includeComment: true,
+        excludeArgsForFunctions: ['unmatchedFunction'],
       }],
       errors: [{
-        message: 'Using Thai characters: ความคิดเห็นบรรทัดเดียว',
-        type: 'Line',
+        message: 'Using Thai characters: อักษรแม่แบบ',
+        type: 'TemplateElement',
+      }],
+    },
+    {
+      code: 'var value = a.b.c.d(\'อักขระ\'); var tpl = <Hello>{dic(\'อักขระ\')}</Hello>;',
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+      errors: [{
+        message: 'Using Thai characters: \'อักขระ\'', type: 'Literal',
       }, {
-        message: 'Using Thai characters: หลายสายความคิดเห็น',
-        type: 'Block',
+        message: 'Using Thai characters: \'อักขระ\'', type: 'Literal',
+      }],
+    },
+    {
+      code: `
+        var value1 = i18n.t('เมื่อการยืนยันตัวตนล้มเหลว' + 'จะมีข้อความ');
+        var value2 = i18n.t(isValid ? "ถูกต้อง" : "ไม่ถูกต้อง");
+        var value3 = i18n.t(key || "ค่าเริ่มต้น");
+      `,
+      errors: [{
+        message: 'Using Thai characters: \'เมื่อการยืนยันตัวตนล้มเหลว\'', type: 'Literal',
+      }, {
+        message: 'Using Thai characters: \'จะมีข้อความ\'', type: 'Literal',
+      }, {
+        message: 'Using Thai characters: "ถูกต้อง"', type: 'Literal',
+      }, {
+        message: 'Using Thai characters: "ไม่ถูกต้อง"', type: 'Literal',
+      }, {
+        message: 'Using Thai characters: "ค่าเริ่มต้น"', type: 'Literal',
       }],
     },
   ],

@@ -19,13 +19,18 @@ const RuleTester = require('eslint').RuleTester;
 const ruleTester = new RuleTester();
 ruleTester.run('no-korean-character', rule, {
   valid: [
+    // No target language in code.
     'console.log("english");',
     {
       code: 'var str = `中文`;',
       env: { es6: true },
     },
+
+    // Comments shouldn't be flagged.
     '// 한 줄 댓글',
     '/* 멀티 라인 댓글 */',
+
+    // Identifiers shouldn't be flagged.
     {
       code: `
         import 식별자0 from 'xyz';
@@ -40,6 +45,8 @@ ruleTester.run('no-korean-character', rule, {
         sourceType: 'module',
       },
     },
+
+    // Special case: bypass argument checks for specified functions.
     {
       code: 'var value = a.b.c.d(\'문자열\'); var tpl = <Hello>{dic(\'문자열\')}</Hello>;',
       options: [{
@@ -72,48 +79,11 @@ ruleTester.run('no-korean-character', rule, {
     },
   ],
   invalid: [
-    {
-      code: 'var tpl = <Hello title=\'안녕하세요\'>컴포넌트</Hello>',
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
-        },
-      },
-      errors: [{
-        message: 'Using Korean characters: \'안녕하세요\'', type: 'Literal',
-      }, {
-        message: 'Using Korean characters: 컴포넌트', type: 'JSXText',
-      }],
-    },
-    {
-      code: 'var func = function(v){return v;}; var tpl = <Hello>{func(\'함수\')}</Hello>;',
-      options: [{
-        excludeArgsForFunctions: ['dic'],
-      }],
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
-        },
-      },
-      errors: [{
-        message: 'Using Korean characters: \'함수\'', type: 'Literal',
-      }],
-    },
+    // General
     {
       code: 'var tl = `템플릿 문자열`',
       env: { es6: true },
       errors: [{ message: 'Using Korean characters: 템플릿 문자열', type: 'TemplateElement' }],
-    },
-    {
-      code: 'var tl = func(`템플릿 문자열`)',
-      env: { es6: true },
-      options: [{
-        excludeArgsForFunctions: ['dic'],
-      }],
-      errors: [{
-        message: 'Using Korean characters: 템플릿 문자열',
-        type: 'TemplateElement',
-      }],
     },
     {
       code: 'console.log(\'english\' + \'한국어\');',
@@ -135,6 +105,41 @@ ruleTester.run('no-korean-character', rule, {
       code: 'var ary = ["배열"];',
       errors: [{ message: 'Using Korean characters: "배열"', type: 'Literal' }],
     },
+
+    // JSX
+    {
+      code: 'var tpl = <Hello title=\'안녕하세요\'>컴포넌트</Hello>',
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+      errors: [{
+        message: 'Using Korean characters: \'안녕하세요\'', type: 'Literal',
+      }, {
+        message: 'Using Korean characters: 컴포넌트', type: 'JSXText',
+      }],
+    },
+
+    // Special case: lint the comments as `includeComment` option enabled.
+    {
+      code: `
+        // 한 줄 댓글
+        /* 멀티 라인 댓글 */
+      `,
+      options: [{
+        includeComment: true,
+      }],
+      errors: [{
+        message: 'Using Korean characters: 한 줄 댓글',
+        type: 'Line',
+      }, {
+        message: 'Using Korean characters: 멀티 라인 댓글',
+        type: 'Block',
+      }],
+    },
+
+    // Special case: lint identifiers as `includeIdentifier` option enabled.
     {
       code: `
         import 식별자0 from 'xyz';
@@ -177,20 +182,48 @@ ruleTester.run('no-korean-character', rule, {
         type: 'Identifier',
       }],
     },
+
+    // Arguments without (proper) `excludeArgsForFunctions` should be flagged.
     {
-      code: `
-        // 한 줄 댓글
-        /* 멀티 라인 댓글 */
-      `,
+      code: 'var tl = func(`템플릿 문자열`)',
+      env: { es6: true },
       options: [{
-        includeComment: true,
+        excludeArgsForFunctions: ['unmatchedFunction'],
       }],
       errors: [{
-        message: 'Using Korean characters: 한 줄 댓글',
-        type: 'Line',
+        message: 'Using Korean characters: 템플릿 문자열',
+        type: 'TemplateElement',
+      }],
+    },
+    {
+      code: 'var value = a.b.c.d(\'문자열\'); var tpl = <Hello>{dic(\'문자열\')}</Hello>;',
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+      errors: [{
+        message: 'Using Korean characters: \'문자열\'', type: 'Literal',
       }, {
-        message: 'Using Korean characters: 멀티 라인 댓글',
-        type: 'Block',
+        message: 'Using Korean characters: \'문자열\'', type: 'Literal',
+      }],
+    },
+    {
+      code: `
+        var value1 = i18n.t('오류' + '코드');
+        var value2 = i18n.t(isValid ? "유효한" : "유효하지 않은");
+        var value3 = i18n.t(key || "기본값");
+      `,
+      errors: [{
+        message: 'Using Korean characters: \'오류\'', type: 'Literal',
+      }, {
+        message: 'Using Korean characters: \'코드\'', type: 'Literal',
+      }, {
+        message: 'Using Korean characters: "유효한"', type: 'Literal',
+      }, {
+        message: 'Using Korean characters: "유효하지 않은"', type: 'Literal',
+      }, {
+        message: 'Using Korean characters: "기본값"', type: 'Literal',
       }],
     },
   ],

@@ -19,13 +19,18 @@ const RuleTester = require('eslint').RuleTester;
 const ruleTester = new RuleTester();
 ruleTester.run('no-russian-character', rule, {
   valid: [
+    // No target language in code.
     'console.log("english");',
     {
       code: 'var str = `한국어`;',
       env: { es6: true },
     },
+
+    // Comments shouldn't be flagged.
     '// Комментарий, занимающий одну строку.',
     '/* Комментарий, занимающий несколько строк. */',
+
+    // Identifiers shouldn't be flagged.
     {
       code: `
         import Идентификатор0 from 'xyz';
@@ -40,6 +45,8 @@ ruleTester.run('no-russian-character', rule, {
         sourceType: 'module',
       },
     },
+
+    // Special case: bypass argument checks for specified functions.
     {
       code: 'var value = a.b.c.d(\'Строки\'); var tpl = <Hello>{dic(\'Строки\')}</Hello>;',
       options: [{
@@ -72,47 +79,10 @@ ruleTester.run('no-russian-character', rule, {
     },
   ],
   invalid: [
-    {
-      code: 'var tpl = <Hello title=\'Привет\'>компонентов</Hello>',
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
-        },
-      },
-      errors: [{
-        message: 'Using Russian characters: \'Привет\'', type: 'Literal',
-      }, {
-        message: 'Using Russian characters: компонентов', type: 'JSXText',
-      }],
-    },
-    {
-      code: 'var func = function(v){return v;}; var tpl = <Hello>{func(\'Функции\')}</Hello>;',
-      options: [{
-        excludeArgsForFunctions: ['dic'],
-      }],
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
-        },
-      },
-      errors: [{
-        message: 'Using Russian characters: \'Функции\'', type: 'Literal',
-      }],
-    },
+    // General
     {
       code: 'var tl = `Шаблонные строки`',
       env: { es6: true },
-      errors: [{
-        message: 'Using Russian characters: Шаблонные строки',
-        type: 'TemplateElement',
-      }],
-    },
-    {
-      code: 'var tl = func(`Шаблонные строки`)',
-      env: { es6: true },
-      options: [{
-        excludeArgsForFunctions: ['dic'],
-      }],
       errors: [{
         message: 'Using Russian characters: Шаблонные строки',
         type: 'TemplateElement',
@@ -153,6 +123,41 @@ ruleTester.run('no-russian-character', rule, {
         type: 'Literal',
       }],
     },
+
+    // JSX
+    {
+      code: 'var tpl = <Hello title=\'Привет\'>компонентов</Hello>',
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+      errors: [{
+        message: 'Using Russian characters: \'Привет\'', type: 'Literal',
+      }, {
+        message: 'Using Russian characters: компонентов', type: 'JSXText',
+      }],
+    },
+
+    // Special case: lint the comments as `includeComment` option enabled.
+    {
+      code: `
+        // Комментарий, занимающий одну строку.
+        /* Комментарий, занимающий несколько строк. */
+      `,
+      options: [{
+        includeComment: true,
+      }],
+      errors: [{
+        message: 'Using Russian characters: Комментарий, занимающий одну строку.',
+        type: 'Line',
+      }, {
+        message: 'Using Russian characters: Комментарий, занимающий несколько строк.',
+        type: 'Block',
+      }],
+    },
+
+    // Special case: lint identifiers as `includeIdentifier` option enabled.
     {
       // с is cyrillic
       code: `
@@ -196,20 +201,48 @@ ruleTester.run('no-russian-character', rule, {
         type: 'Identifier',
       }],
     },
+
+    // Arguments without (proper) `excludeArgsForFunctions` should be flagged.
     {
-      code: `
-        // Комментарий, занимающий одну строку.
-        /* Комментарий, занимающий несколько строк. */
-      `,
+      code: 'var tl = func(`Шаблонные строки`)',
+      env: { es6: true },
       options: [{
-        includeComment: true,
+        excludeArgsForFunctions: ['unmatchedFunction'],
       }],
       errors: [{
-        message: 'Using Russian characters: Комментарий, занимающий одну строку.',
-        type: 'Line',
+        message: 'Using Russian characters: Шаблонные строки',
+        type: 'TemplateElement',
+      }],
+    },
+    {
+      code: 'var value = a.b.c.d(\'Строки\'); var tpl = <Hello>{dic(\'Строки\')}</Hello>;',
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+      errors: [{
+        message: 'Using Russian characters: \'Строки\'', type: 'Literal',
       }, {
-        message: 'Using Russian characters: Комментарий, занимающий несколько строк.',
-        type: 'Block',
+        message: 'Using Russian characters: \'Строки\'', type: 'Literal',
+      }],
+    },
+    {
+      code: `
+        var value1 = i18n.t('код' + 'ошибки');
+        var value2 = i18n.t(isValid ? "действительный" : "неверный");
+        var value3 = i18n.t(key || "значение по умолчанию");
+      `,
+      errors: [{
+        message: 'Using Russian characters: \'код\'', type: 'Literal',
+      }, {
+        message: 'Using Russian characters: \'ошибки\'', type: 'Literal',
+      }, {
+        message: 'Using Russian characters: "действительный"', type: 'Literal',
+      }, {
+        message: 'Using Russian characters: "неверный"', type: 'Literal',
+      }, {
+        message: 'Using Russian characters: "значение по умолчанию"', type: 'Literal',
       }],
     },
   ],

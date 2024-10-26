@@ -19,13 +19,18 @@ const RuleTester = require('eslint').RuleTester;
 const ruleTester = new RuleTester();
 ruleTester.run('no-greek-character', rule, {
   valid: [
+    // No target language in code.
     'console.log("english");',
     {
       code: 'var str = `中文`;',
       env: { es6: true },
     },
+
+    // Comments shouldn't be flagged.
     '// Σχόλιο μονής γραμμής',
     '/* Σχολιασμός πολλαπλών γραμμών */',
+
+    // Comments shouldn't be flagged.
     {
       code: `
         import Αναγνωριστικά0 from 'xyz';
@@ -40,6 +45,8 @@ ruleTester.run('no-greek-character', rule, {
         sourceType: 'module',
       },
     },
+
+    // Special case: bypass argument checks for specified functions.
     {
       code: 'var value = a.b.c.d(\'Σειρά\'); var tpl = <Hello>{dic(\'Σειρά\')}</Hello>;',
       options: [{
@@ -72,48 +79,11 @@ ruleTester.run('no-greek-character', rule, {
     },
   ],
   invalid: [
-    {
-      code: 'var tpl = <Hello title=\'Χαίρετε\'>συστατικό</Hello>',
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
-        },
-      },
-      errors: [{
-        message: 'Using Greek characters: \'Χαίρετε\'', type: 'Literal',
-      }, {
-        message: 'Using Greek characters: συστατικό', type: 'JSXText',
-      }],
-    },
-    {
-      code: 'var func = function(v){return v;}; var tpl = <Hello>{func(\'λειτουργία\')}</Hello>;',
-      options: [{
-        excludeArgsForFunctions: ['dic'],
-      }],
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
-        },
-      },
-      errors: [{
-        message: 'Using Greek characters: \'λειτουργία\'', type: 'Literal',
-      }],
-    },
+    // General
     {
       code: 'var str = `συμβολοσειρές`',
       env: { es6: true },
       errors: [{ message: 'Using Greek characters: συμβολοσειρές', type: 'TemplateElement' }],
-    },
-    {
-      code: 'var tl = func(`συμβολοσειρές`)',
-      env: { es6: true },
-      options: [{
-        excludeArgsForFunctions: ['dic'],
-      }],
-      errors: [{
-        message: 'Using Greek characters: συμβολοσειρές',
-        type: 'TemplateElement',
-      }],
     },
     {
       code: 'console.log(\'english\' + \'Ελληνικά\');',
@@ -135,6 +105,41 @@ ruleTester.run('no-greek-character', rule, {
       code: 'var ary = ["πίνακας"];',
       errors: [{ message: 'Using Greek characters: "πίνακας"', type: 'Literal' }],
     },
+
+    // JSX
+    {
+      code: 'var tpl = <Hello title=\'Χαίρετε\'>συστατικό</Hello>',
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+      errors: [{
+        message: 'Using Greek characters: \'Χαίρετε\'', type: 'Literal',
+      }, {
+        message: 'Using Greek characters: συστατικό', type: 'JSXText',
+      }],
+    },
+
+    // Special case: lint the comments as `includeComment` option enabled.
+    {
+      code: `
+        // Σχόλιο μονής γραμμής
+        /* Σχολιασμός πολλαπλών γραμμών */
+      `,
+      options: [{
+        includeComment: true,
+      }],
+      errors: [{
+        message: 'Using Greek characters: Σχόλιο μονής γραμμής',
+        type: 'Line',
+      }, {
+        message: 'Using Greek characters: Σχολιασμός πολλαπλών γραμμών',
+        type: 'Block',
+      }],
+    },
+
+    // Special case: lint identifiers as `includeIdentifier` option enabled.
     {
       code: `
         import Αναγνωριστικά0 from 'xyz';
@@ -177,20 +182,48 @@ ruleTester.run('no-greek-character', rule, {
         type: 'Identifier',
       }],
     },
+
+    // Arguments without (proper) `excludeArgsForFunctions` should be flagged.
     {
-      code: `
-        // Σχόλιο μονής γραμμής
-        /* Σχολιασμός πολλαπλών γραμμών */
-      `,
+      code: 'var tl = func(`συμβολοσειρές`)',
+      env: { es6: true },
       options: [{
-        includeComment: true,
+        excludeArgsForFunctions: ['unmatchedFunction'],
       }],
       errors: [{
-        message: 'Using Greek characters: Σχόλιο μονής γραμμής',
-        type: 'Line',
+        message: 'Using Greek characters: συμβολοσειρές',
+        type: 'TemplateElement',
+      }],
+    },
+    {
+      code: 'var value = a.b.c.d(\'Σειρά\'); var tpl = <Hello>{dic(\'Σειρά\')}</Hello>;',
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+      errors: [{
+        message: 'Using Greek characters: \'Σειρά\'', type: 'Literal',
       }, {
-        message: 'Using Greek characters: Σχολιασμός πολλαπλών γραμμών',
-        type: 'Block',
+        message: 'Using Greek characters: \'Σειρά\'', type: 'Literal',
+      }],
+    },
+    {
+      code: `
+        var value1 = i18n.t('Γειά σου' + 'κόσμος');
+        var value2 = i18n.t(isValid ? "έγκυρος" : "άκυρος");
+        var value3 = i18n.t(key || "προεπιλεγμένη τιμή");
+      `,
+      errors: [{
+        message: 'Using Greek characters: \'Γειά σου\'', type: 'Literal',
+      }, {
+        message: 'Using Greek characters: \'κόσμος\'', type: 'Literal',
+      }, {
+        message: 'Using Greek characters: "έγκυρος"', type: 'Literal',
+      }, {
+        message: 'Using Greek characters: "άκυρος"', type: 'Literal',
+      }, {
+        message: 'Using Greek characters: "προεπιλεγμένη τιμή"', type: 'Literal',
       }],
     },
   ],
