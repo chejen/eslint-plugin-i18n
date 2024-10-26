@@ -23,7 +23,9 @@ ruleTester.run('no-russian-character', rule, {
     'console.log("english");',
     {
       code: 'var str = `한국어`;',
-      env: { es6: true },
+      languageOptions: {
+        ecmaVersion: 6,
+      },
     },
 
     // Comments shouldn't be flagged.
@@ -40,7 +42,7 @@ ruleTester.run('no-russian-character', rule, {
         a[Идентификатор6] = 0;
         export default Идентификатор7;
       `,
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 6,
         sourceType: 'module',
       },
@@ -52,9 +54,11 @@ ruleTester.run('no-russian-character', rule, {
       options: [{
         excludeArgsForFunctions: ['a.b.c.d', 'dic'],
       }],
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
+      languageOptions: {
+        parserOptions: {
+          ecmaFeatures: {
+            jsx: true,
+          },
         },
       },
     },
@@ -63,7 +67,7 @@ ruleTester.run('no-russian-character', rule, {
       options: [{
         excludeArgsForFunctions: ['dic', 'i18n.t', 'x.y.z'],
       }],
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 6,
       },
     },
@@ -84,7 +88,7 @@ ruleTester.run('no-russian-character', rule, {
       options: [{
         excludeArgsForFunctions: ['require'],
       }],
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 6,
       },
     },
@@ -93,7 +97,7 @@ ruleTester.run('no-russian-character', rule, {
       options: [{
         excludeModuleImports: true,
       }],
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 6,
         sourceType: 'module',
       },
@@ -103,7 +107,7 @@ ruleTester.run('no-russian-character', rule, {
       options: [{
         excludeModuleImports: true,
       }],
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 11,
       },
     },
@@ -116,7 +120,7 @@ ruleTester.run('no-russian-character', rule, {
       options: [{
         excludeModuleImports: true,
       }],
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 11,
       },
     },
@@ -126,7 +130,9 @@ ruleTester.run('no-russian-character', rule, {
     // General
     {
       code: 'var tl = `Шаблонные строки`',
-      env: { es6: true },
+      languageOptions: {
+        ecmaVersion: 6,
+      },
       errors: [{
         message: 'Using Russian characters: Шаблонные строки',
         type: 'TemplateElement',
@@ -171,9 +177,11 @@ ruleTester.run('no-russian-character', rule, {
     // JSX
     {
       code: 'var tpl = <Hello title=\'Привет\'>компонентов</Hello>',
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
+      languageOptions: {
+        parserOptions: {
+          ecmaFeatures: {
+            jsx: true,
+          },
         },
       },
       errors: [{
@@ -212,13 +220,13 @@ ruleTester.run('no-russian-character', rule, {
         a[с6] = 0;
         export default с7;
       `,
-      parserOptions: {
-        ecmaVersion: 6,
-        sourceType: 'module',
-      },
       options: [{
         includeIdentifier: true,
       }],
+      languageOptions: {
+        ecmaVersion: 6,
+        sourceType: 'module',
+      },
       errors: [{
         message: 'Using Russian characters: с0',
         type: 'Identifier',
@@ -249,10 +257,12 @@ ruleTester.run('no-russian-character', rule, {
     // Arguments without (proper) `excludeArgsForFunctions` should be flagged.
     {
       code: 'var tl = func(`Шаблонные строки`)',
-      env: { es6: true },
       options: [{
         excludeArgsForFunctions: ['unmatchedFunction'],
       }],
+      languageOptions: {
+        ecmaVersion: 6,
+      },
       errors: [{
         message: 'Using Russian characters: Шаблонные строки',
         type: 'TemplateElement',
@@ -260,9 +270,11 @@ ruleTester.run('no-russian-character', rule, {
     },
     {
       code: 'var value = a.b.c.d(\'Строки\'); var tpl = <Hello>{dic(\'Строки\')}</Hello>;',
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
+      languageOptions: {
+        parserOptions: {
+          ecmaFeatures: {
+            jsx: true,
+          },
         },
       },
       errors: [{
@@ -293,7 +305,7 @@ ruleTester.run('no-russian-character', rule, {
     // Path or module names would be flagged by default.
     {
       code: 'require(`${basePath}/компоненты.jsx`); require(basePath + "Пути/component.jsx");',
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 6,
       },
       errors: [{
@@ -304,7 +316,7 @@ ruleTester.run('no-russian-character', rule, {
     },
     {
       code: `import "Модули"; import { doSomething } from 'Модули/api'`,
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 6,
         sourceType: 'module',
       },
@@ -316,7 +328,7 @@ ruleTester.run('no-russian-character', rule, {
     },
     {
       code: 'import(`${basePath}/Пути/module.js`); import(basePath + "/компоненты.jsx").then(cmp => {});',
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 11,
       },
       errors: [{
@@ -331,7 +343,7 @@ ruleTester.run('no-russian-character', rule, {
           await import(token ? './Модулиa.js' : './Модулиb.js');
         }
       `,
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 11,
       },
       errors: [{

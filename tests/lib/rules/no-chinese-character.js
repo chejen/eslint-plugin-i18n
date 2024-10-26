@@ -23,7 +23,9 @@ ruleTester.run('no-chinese-character', rule, {
     'console.log("english");',
     {
       code: 'var str = `한국어`;',
-      env: { es6: true },
+      languageOptions: {
+        ecmaVersion: 6,
+      },
     },
 
     // Comments shouldn't be flagged.
@@ -40,7 +42,7 @@ ruleTester.run('no-chinese-character', rule, {
         a[标识符6] = 0;
         export default 标识符7;
       `,
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 6,
         sourceType: 'module',
       },
@@ -52,9 +54,11 @@ ruleTester.run('no-chinese-character', rule, {
       options: [{
         excludeArgsForFunctions: ['a.b.c.d', 'dic'],
       }],
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
+      languageOptions: {
+        parserOptions: {
+          ecmaFeatures: {
+            jsx: true,
+          },
         },
       },
     },
@@ -63,7 +67,7 @@ ruleTester.run('no-chinese-character', rule, {
       options: [{
         excludeArgsForFunctions: ['dic', 'i18n.t', 'w.x.y.z'],
       }],
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 6,
       },
     },
@@ -84,7 +88,7 @@ ruleTester.run('no-chinese-character', rule, {
       options: [{
         excludeArgsForFunctions: ['require'],
       }],
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 6,
       },
     },
@@ -93,7 +97,7 @@ ruleTester.run('no-chinese-character', rule, {
       options: [{
         excludeModuleImports: true,
       }],
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 6,
         sourceType: 'module',
       },
@@ -103,7 +107,7 @@ ruleTester.run('no-chinese-character', rule, {
       options: [{
         excludeModuleImports: true,
       }],
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 11,
       },
     },
@@ -116,7 +120,7 @@ ruleTester.run('no-chinese-character', rule, {
       options: [{
         excludeModuleImports: true,
       }],
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 11,
       },
     },
@@ -126,7 +130,9 @@ ruleTester.run('no-chinese-character', rule, {
     // General
     {
       code: 'var str = `樣板字串`; console.log(`${str}、模板字符串`);',
-      env: { es6: true },
+      languageOptions: {
+        ecmaVersion: 6,
+      },
       errors: [{
         message: 'Using Chinese characters: 樣板字串', type: 'TemplateElement',
       }, {
@@ -173,9 +179,11 @@ ruleTester.run('no-chinese-character', rule, {
     // JSX
     {
       code: 'var tpl = <Hello title=\'你好\'>组件</Hello>',
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
+      languageOptions: {
+        parserOptions: {
+          ecmaFeatures: {
+            jsx: true,
+          },
         },
       },
       errors: [{
@@ -213,13 +221,13 @@ ruleTester.run('no-chinese-character', rule, {
         a[標識符6] = 0;
         export default 標識符7;
       `,
-      parserOptions: {
-        ecmaVersion: 6,
-        sourceType: 'module',
-      },
       options: [{
         includeIdentifier: true,
       }],
+      languageOptions: {
+        ecmaVersion: 6,
+        sourceType: 'module',
+      },
       errors: [{
         message: 'Using Chinese characters: 標識符0',
         type: 'Identifier',
@@ -250,10 +258,12 @@ ruleTester.run('no-chinese-character', rule, {
     // Arguments without (proper) `excludeArgsForFunctions` should be flagged.
     {
       code: 'var tl = func(`樣板字串`)',
-      env: { es6: true },
       options: [{
         excludeArgsForFunctions: ['unmatchedFunction'],
       }],
+      languageOptions: {
+        ecmaVersion: 6,
+      },
       errors: [{
         message: 'Using Chinese characters: 樣板字串',
         type: 'TemplateElement',
@@ -261,9 +271,11 @@ ruleTester.run('no-chinese-character', rule, {
     },
     {
       code: 'var value = a.b.c.d(\'字串\'); var tpl = <Hello>{x.y.z(\'函式\')}</Hello>;',
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
+      languageOptions: {
+        parserOptions: {
+          ecmaFeatures: {
+            jsx: true,
+          },
         },
       },
       errors: [{
@@ -294,7 +306,7 @@ ruleTester.run('no-chinese-character', rule, {
     // Path or module names would be flagged by default.
     {
       code: 'require(`${basePath}/元件.jsx`); require(basePath + "路径/component.jsx");',
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 6,
       },
       errors: [{
@@ -305,7 +317,7 @@ ruleTester.run('no-chinese-character', rule, {
     },
     {
       code: `import "模块"; import { doSomething } from '模块/api'`,
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 6,
         sourceType: 'module',
       },
@@ -317,7 +329,7 @@ ruleTester.run('no-chinese-character', rule, {
     },
     {
       code: 'import(`${basePath}/路徑/module.js`); import(basePath + "/元件.jsx").then(cmp => {});',
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 11,
       },
       errors: [{
@@ -332,7 +344,7 @@ ruleTester.run('no-chinese-character', rule, {
           await import(token ? './模块a.js' : './模块b.js');
         }
       `,
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 11,
       },
       errors: [{

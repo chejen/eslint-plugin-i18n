@@ -23,7 +23,9 @@ ruleTester.run('no-japanese-character', rule, {
     'console.log("english");',
     {
       code: 'var str = `한국어`;',
-      env: { es6: true },
+      languageOptions: {
+        ecmaVersion: 6,
+      },
     },
 
     // Comments shouldn't be flagged.
@@ -40,7 +42,7 @@ ruleTester.run('no-japanese-character', rule, {
         a[識別子6] = 0;
         export default 識別子7;
       `,
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 6,
         sourceType: 'module',
       },
@@ -52,9 +54,11 @@ ruleTester.run('no-japanese-character', rule, {
       options: [{
         excludeArgsForFunctions: ['a.b.c.d', 'dic'],
       }],
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
+      languageOptions: {
+        parserOptions: {
+          ecmaFeatures: {
+            jsx: true,
+          },
         },
       },
     },
@@ -63,7 +67,7 @@ ruleTester.run('no-japanese-character', rule, {
       options: [{
         excludeArgsForFunctions: ['dic', 'i18n.t', 'x.y.z'],
       }],
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 6,
       },
     },
@@ -84,7 +88,7 @@ ruleTester.run('no-japanese-character', rule, {
       options: [{
         excludeArgsForFunctions: ['require'],
       }],
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 6,
       },
     },
@@ -93,7 +97,7 @@ ruleTester.run('no-japanese-character', rule, {
       options: [{
         excludeModuleImports: true,
       }],
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 6,
         sourceType: 'module',
       },
@@ -103,7 +107,7 @@ ruleTester.run('no-japanese-character', rule, {
       options: [{
         excludeModuleImports: true,
       }],
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 11,
       },
     },
@@ -116,7 +120,7 @@ ruleTester.run('no-japanese-character', rule, {
       options: [{
         excludeModuleImports: true,
       }],
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 11,
       },
     },
@@ -126,7 +130,9 @@ ruleTester.run('no-japanese-character', rule, {
     // General
     {
       code: 'var tl = `テンプレート文字列`',
-      env: { es6: true },
+      languageOptions: {
+        ecmaVersion: 6,
+      },
       errors: [{
         message: 'Using Japanese characters: テンプレート文字列',
         type: 'TemplateElement',
@@ -156,9 +162,11 @@ ruleTester.run('no-japanese-character', rule, {
     // JSX
     {
       code: 'var tpl = <Hello title=\'こんにちは\'>コンポーネント</Hello>',
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
+      languageOptions: {
+        parserOptions: {
+          ecmaFeatures: {
+            jsx: true,
+          },
         },
       },
       errors: [{
@@ -196,13 +204,13 @@ ruleTester.run('no-japanese-character', rule, {
         a[識別子6] = 0;
         export default 識別子7;
       `,
-      parserOptions: {
-        ecmaVersion: 6,
-        sourceType: 'module',
-      },
       options: [{
         includeIdentifier: true,
       }],
+      languageOptions: {
+        ecmaVersion: 6,
+        sourceType: 'module',
+      },
       errors: [{
         message: 'Using Japanese characters: 識別子0',
         type: 'Identifier',
@@ -233,10 +241,12 @@ ruleTester.run('no-japanese-character', rule, {
     // Arguments without (proper) `excludeArgsForFunctions` should be flagged.
     {
       code: 'var tl = func(`テンプレート文字列`)',
-      env: { es6: true },
       options: [{
         excludeArgsForFunctions: ['unmatchedFunction'],
       }],
+      languageOptions: {
+        ecmaVersion: 6,
+      },
       errors: [{
         message: 'Using Japanese characters: テンプレート文字列',
         type: 'TemplateElement',
@@ -244,9 +254,11 @@ ruleTester.run('no-japanese-character', rule, {
     },
     {
       code: 'var value = a.b.c.d(\'関数\'); var tpl = <Hello>{dic(\'関数\')}</Hello>;',
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
+      languageOptions: {
+        parserOptions: {
+          ecmaFeatures: {
+            jsx: true,
+          },
         },
       },
       errors: [{
@@ -277,7 +289,7 @@ ruleTester.run('no-japanese-character', rule, {
     // Path or module names would be flagged by default.
     {
       code: 'require(`${basePath}/コンポーネント.jsx`); require(basePath + "路径/component.jsx");',
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 6,
       },
       errors: [{
@@ -288,7 +300,7 @@ ruleTester.run('no-japanese-character', rule, {
     },
     {
       code: `import "モジュール"; import { doSomething } from 'モジュール/api'`,
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 6,
         sourceType: 'module',
       },
@@ -300,7 +312,7 @@ ruleTester.run('no-japanese-character', rule, {
     },
     {
       code: 'import(`${basePath}/パス/module.js`); import(basePath + "/コンポーネント.jsx").then(cmp => {});',
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 11,
       },
       errors: [{
@@ -315,7 +327,7 @@ ruleTester.run('no-japanese-character', rule, {
           await import(token ? './モジュール-a.js' : './モジュール-b.js');
         }
       `,
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 11,
       },
       errors: [{

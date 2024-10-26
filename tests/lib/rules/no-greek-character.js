@@ -23,7 +23,9 @@ ruleTester.run('no-greek-character', rule, {
     'console.log("english");',
     {
       code: 'var str = `中文`;',
-      env: { es6: true },
+      languageOptions: {
+        ecmaVersion: 6,
+      },
     },
 
     // Comments shouldn't be flagged.
@@ -40,7 +42,7 @@ ruleTester.run('no-greek-character', rule, {
         a[Αναγνωριστικά6] = 0;
         export default Αναγνωριστικά7;
       `,
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 6,
         sourceType: 'module',
       },
@@ -52,9 +54,11 @@ ruleTester.run('no-greek-character', rule, {
       options: [{
         excludeArgsForFunctions: ['a.b.c.d', 'dic'],
       }],
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
+      languageOptions: {
+        parserOptions: {
+          ecmaFeatures: {
+            jsx: true,
+          },
         },
       },
     },
@@ -63,7 +67,7 @@ ruleTester.run('no-greek-character', rule, {
       options: [{
         excludeArgsForFunctions: ['dic', 'i18n.t', 'x.y.z'],
       }],
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 6,
       },
     },
@@ -84,7 +88,7 @@ ruleTester.run('no-greek-character', rule, {
       options: [{
         excludeArgsForFunctions: ['require'],
       }],
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 6,
       },
     },
@@ -93,7 +97,7 @@ ruleTester.run('no-greek-character', rule, {
       options: [{
         excludeModuleImports: true,
       }],
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 6,
         sourceType: 'module',
       },
@@ -103,7 +107,7 @@ ruleTester.run('no-greek-character', rule, {
       options: [{
         excludeModuleImports: true,
       }],
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 11,
       },
     },
@@ -116,7 +120,7 @@ ruleTester.run('no-greek-character', rule, {
       options: [{
         excludeModuleImports: true,
       }],
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 11,
       },
     },
@@ -126,7 +130,9 @@ ruleTester.run('no-greek-character', rule, {
     // General
     {
       code: 'var str = `συμβολοσειρές`',
-      env: { es6: true },
+      languageOptions: {
+        ecmaVersion: 6,
+      },
       errors: [{ message: 'Using Greek characters: συμβολοσειρές', type: 'TemplateElement' }],
     },
     {
@@ -153,9 +159,11 @@ ruleTester.run('no-greek-character', rule, {
     // JSX
     {
       code: 'var tpl = <Hello title=\'Χαίρετε\'>συστατικό</Hello>',
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
+      languageOptions: {
+        parserOptions: {
+          ecmaFeatures: {
+            jsx: true,
+          },
         },
       },
       errors: [{
@@ -193,13 +201,13 @@ ruleTester.run('no-greek-character', rule, {
         a[Αναγνωριστικά6] = 0;
         export default Αναγνωριστικά7;
       `,
-      parserOptions: {
-        ecmaVersion: 6,
-        sourceType: 'module',
-      },
       options: [{
         includeIdentifier: true,
       }],
+      languageOptions: {
+        ecmaVersion: 6,
+        sourceType: 'module',
+      },
       errors: [{
         message: 'Using Greek characters: Αναγνωριστικά0',
         type: 'Identifier',
@@ -230,10 +238,12 @@ ruleTester.run('no-greek-character', rule, {
     // Arguments without (proper) `excludeArgsForFunctions` should be flagged.
     {
       code: 'var tl = func(`συμβολοσειρές`)',
-      env: { es6: true },
       options: [{
         excludeArgsForFunctions: ['unmatchedFunction'],
       }],
+      languageOptions: {
+        ecmaVersion: 6,
+      },
       errors: [{
         message: 'Using Greek characters: συμβολοσειρές',
         type: 'TemplateElement',
@@ -241,9 +251,11 @@ ruleTester.run('no-greek-character', rule, {
     },
     {
       code: 'var value = a.b.c.d(\'Σειρά\'); var tpl = <Hello>{dic(\'Σειρά\')}</Hello>;',
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
+      languageOptions: {
+        parserOptions: {
+          ecmaFeatures: {
+            jsx: true,
+          },
         },
       },
       errors: [{
@@ -274,7 +286,7 @@ ruleTester.run('no-greek-character', rule, {
     // Path or module names would be flagged by default.
     {
       code: 'require(`${basePath}/συστατικό.jsx`); require(basePath + "μονοπάτι/component.jsx");',
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 6,
       },
       errors: [{
@@ -285,7 +297,7 @@ ruleTester.run('no-greek-character', rule, {
     },
     {
       code: `import "μονάδα μέτρησης"; import { doSomething } from 'μονάδα μέτρησης/api'`,
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 6,
         sourceType: 'module',
       },
@@ -297,7 +309,7 @@ ruleTester.run('no-greek-character', rule, {
     },
     {
       code: 'import(`${basePath}/μονοπάτι/module.js`); import(basePath + "/συστατικό.jsx").then(cmp => {});',
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 11,
       },
       errors: [{
@@ -312,7 +324,7 @@ ruleTester.run('no-greek-character', rule, {
           await import(token ? './μονάδα μέτρησηςa.js' : './μονάδα μέτρησηςb.js');
         }
       `,
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 11,
       },
       errors: [{

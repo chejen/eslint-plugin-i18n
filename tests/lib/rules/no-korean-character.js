@@ -23,7 +23,9 @@ ruleTester.run('no-korean-character', rule, {
     'console.log("english");',
     {
       code: 'var str = `中文`;',
-      env: { es6: true },
+      languageOptions: {
+        ecmaVersion: 6,
+      },
     },
 
     // Comments shouldn't be flagged.
@@ -40,7 +42,7 @@ ruleTester.run('no-korean-character', rule, {
         a[식별자6] = 0;
         export default 식별자7;
       `,
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 6,
         sourceType: 'module',
       },
@@ -52,9 +54,11 @@ ruleTester.run('no-korean-character', rule, {
       options: [{
         excludeArgsForFunctions: ['a.b.c.d', 'dic'],
       }],
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
+      languageOptions: {
+        parserOptions: {
+          ecmaFeatures: {
+            jsx: true,
+          },
         },
       },
     },
@@ -63,7 +67,7 @@ ruleTester.run('no-korean-character', rule, {
       options: [{
         excludeArgsForFunctions: ['dic', 'i18n.t', 'x.y.z'],
       }],
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 6,
       },
     },
@@ -84,7 +88,7 @@ ruleTester.run('no-korean-character', rule, {
       options: [{
         excludeArgsForFunctions: ['require'],
       }],
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 6,
       },
     },
@@ -93,7 +97,7 @@ ruleTester.run('no-korean-character', rule, {
       options: [{
         excludeModuleImports: true,
       }],
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 6,
         sourceType: 'module',
       },
@@ -103,7 +107,7 @@ ruleTester.run('no-korean-character', rule, {
       options: [{
         excludeModuleImports: true,
       }],
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 11,
       },
     },
@@ -116,7 +120,7 @@ ruleTester.run('no-korean-character', rule, {
       options: [{
         excludeModuleImports: true,
       }],
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 11,
       },
     },
@@ -126,7 +130,9 @@ ruleTester.run('no-korean-character', rule, {
     // General
     {
       code: 'var tl = `템플릿 문자열`',
-      env: { es6: true },
+      languageOptions: {
+        ecmaVersion: 6,
+      },
       errors: [{ message: 'Using Korean characters: 템플릿 문자열', type: 'TemplateElement' }],
     },
     {
@@ -153,9 +159,11 @@ ruleTester.run('no-korean-character', rule, {
     // JSX
     {
       code: 'var tpl = <Hello title=\'안녕하세요\'>컴포넌트</Hello>',
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
+      languageOptions: {
+        parserOptions: {
+          ecmaFeatures: {
+            jsx: true,
+          },
         },
       },
       errors: [{
@@ -193,13 +201,13 @@ ruleTester.run('no-korean-character', rule, {
         a[식별자6] = 0;
         export default 식별자7;
       `,
-      parserOptions: {
-        ecmaVersion: 6,
-        sourceType: 'module',
-      },
       options: [{
         includeIdentifier: true,
       }],
+      languageOptions: {
+        ecmaVersion: 6,
+        sourceType: 'module',
+      },
       errors: [{
         message: 'Using Korean characters: 식별자0',
         type: 'Identifier',
@@ -230,10 +238,12 @@ ruleTester.run('no-korean-character', rule, {
     // Arguments without (proper) `excludeArgsForFunctions` should be flagged.
     {
       code: 'var tl = func(`템플릿 문자열`)',
-      env: { es6: true },
       options: [{
         excludeArgsForFunctions: ['unmatchedFunction'],
       }],
+      languageOptions: {
+        ecmaVersion: 6,
+      },
       errors: [{
         message: 'Using Korean characters: 템플릿 문자열',
         type: 'TemplateElement',
@@ -241,9 +251,11 @@ ruleTester.run('no-korean-character', rule, {
     },
     {
       code: 'var value = a.b.c.d(\'문자열\'); var tpl = <Hello>{dic(\'문자열\')}</Hello>;',
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
+      languageOptions: {
+        parserOptions: {
+          ecmaFeatures: {
+            jsx: true,
+          },
         },
       },
       errors: [{
@@ -274,7 +286,7 @@ ruleTester.run('no-korean-character', rule, {
     // Path or module names would be flagged by default.
     {
       code: 'require(`${basePath}/컴포넌트.jsx`); require(basePath + "패스/component.jsx");',
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 6,
       },
       errors: [{
@@ -285,7 +297,7 @@ ruleTester.run('no-korean-character', rule, {
     },
     {
       code: `import "모듈"; import { doSomething } from '모듈/api'`,
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 6,
         sourceType: 'module',
       },
@@ -297,7 +309,7 @@ ruleTester.run('no-korean-character', rule, {
     },
     {
       code: 'import(`${basePath}/패스/module.js`); import(basePath + "/컴포넌트.jsx").then(cmp => {});',
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 11,
       },
       errors: [{
@@ -312,7 +324,7 @@ ruleTester.run('no-korean-character', rule, {
           await import(token ? './모듈a.js' : './모듈b.js');
         }
       `,
-      parserOptions: {
+      languageOptions: {
         ecmaVersion: 11,
       },
       errors: [{
