@@ -77,7 +77,51 @@ ruleTester.run('no-chinese-character', rule, {
         excludeArgsForFunctions: ['i18n.t'],
       }],
     },
+
+    // Special case: bypass module related checks
+    {
+      code: 'require(`${basePath}/元件.jsx`); require(basePath + "路径/component.jsx")',
+      options: [{
+        excludeArgsForFunctions: ['require'],
+      }],
+      parserOptions: {
+        ecmaVersion: 6,
+      },
+    },
+    {
+      code: `import '模块'; import { doSomething } from '模块/api';`,
+      options: [{
+        excludeModuleImports: true,
+      }],
+      parserOptions: {
+        ecmaVersion: 6,
+        sourceType: 'module',
+      },
+    },
+    {
+      code: 'import(`${basePath}/路徑/module.js`); import(basePath + "/元件.jsx").then(cmp => {});',
+      options: [{
+        excludeModuleImports: true,
+      }],
+      parserOptions: {
+        ecmaVersion: 11,
+      },
+    },
+    {
+      code: `
+        async function demo() {
+          await import(token ? './模块a.js' : './模块b.js');
+        }
+      `,
+      options: [{
+        excludeModuleImports: true,
+      }],
+      parserOptions: {
+        ecmaVersion: 11,
+      },
+    },
   ],
+
   invalid: [
     // General
     {
@@ -244,6 +288,57 @@ ruleTester.run('no-chinese-character', rule, {
         message: 'Using Chinese characters: "字符串"', type: 'Literal',
       }, {
         message: 'Using Chinese characters: "默认值"', type: 'Literal',
+      }],
+    },
+
+    // Path or module names would be flagged by default.
+    {
+      code: 'require(`${basePath}/元件.jsx`); require(basePath + "路径/component.jsx");',
+      parserOptions: {
+        ecmaVersion: 6,
+      },
+      errors: [{
+        message: 'Using Chinese characters: /元件.jsx',
+      }, {
+        message: 'Using Chinese characters: "路径/component.jsx"',
+      }],
+    },
+    {
+      code: `import "模块"; import { doSomething } from '模块/api'`,
+      parserOptions: {
+        ecmaVersion: 6,
+        sourceType: 'module',
+      },
+      errors: [{
+        message: 'Using Chinese characters: "模块"',
+      }, {
+        message: 'Using Chinese characters: \'模块/api\'',
+      }],
+    },
+    {
+      code: 'import(`${basePath}/路徑/module.js`); import(basePath + "/元件.jsx").then(cmp => {});',
+      parserOptions: {
+        ecmaVersion: 11,
+      },
+      errors: [{
+        message: 'Using Chinese characters: /路徑/module.js',
+      }, {
+        message: 'Using Chinese characters: "/元件.jsx"',
+      }],
+    },
+    {
+      code: `
+        async function demo() {
+          await import(token ? './模块a.js' : './模块b.js');
+        }
+      `,
+      parserOptions: {
+        ecmaVersion: 11,
+      },
+      errors: [{
+        message: 'Using Chinese characters: \'./模块a.js\'',
+      }, {
+        message: 'Using Chinese characters: \'./模块b.js\'',
       }],
     },
   ],

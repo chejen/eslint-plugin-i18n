@@ -77,7 +77,51 @@ ruleTester.run('no-korean-character', rule, {
         excludeArgsForFunctions: ['i18n.t'],
       }],
     },
+
+    // Special case: bypass module related checks
+    {
+      code: 'require(`${basePath}/컴포넌트.jsx`); require(basePath + "패스/component.jsx")',
+      options: [{
+        excludeArgsForFunctions: ['require'],
+      }],
+      parserOptions: {
+        ecmaVersion: 6,
+      },
+    },
+    {
+      code: `import '모듈'; import { doSomething } from '모듈/api';`,
+      options: [{
+        excludeModuleImports: true,
+      }],
+      parserOptions: {
+        ecmaVersion: 6,
+        sourceType: 'module',
+      },
+    },
+    {
+      code: 'import(`${basePath}/패스/module.js`); import(basePath + "/컴포넌트.jsx").then(cmp => {});',
+      options: [{
+        excludeModuleImports: true,
+      }],
+      parserOptions: {
+        ecmaVersion: 11,
+      },
+    },
+    {
+      code: `
+        async function demo() {
+          await import(token ? './모듈a.js' : './모듈b.js');
+        }
+      `,
+      options: [{
+        excludeModuleImports: true,
+      }],
+      parserOptions: {
+        ecmaVersion: 11,
+      },
+    },
   ],
+
   invalid: [
     // General
     {
@@ -224,6 +268,57 @@ ruleTester.run('no-korean-character', rule, {
         message: 'Using Korean characters: "유효하지 않은"', type: 'Literal',
       }, {
         message: 'Using Korean characters: "기본값"', type: 'Literal',
+      }],
+    },
+
+    // Path or module names would be flagged by default.
+    {
+      code: 'require(`${basePath}/컴포넌트.jsx`); require(basePath + "패스/component.jsx");',
+      parserOptions: {
+        ecmaVersion: 6,
+      },
+      errors: [{
+        message: 'Using Korean characters: /컴포넌트.jsx',
+      }, {
+        message: 'Using Korean characters: "패스/component.jsx"',
+      }],
+    },
+    {
+      code: `import "모듈"; import { doSomething } from '모듈/api'`,
+      parserOptions: {
+        ecmaVersion: 6,
+        sourceType: 'module',
+      },
+      errors: [{
+        message: 'Using Korean characters: "모듈"',
+      }, {
+        message: 'Using Korean characters: \'모듈/api\'',
+      }],
+    },
+    {
+      code: 'import(`${basePath}/패스/module.js`); import(basePath + "/컴포넌트.jsx").then(cmp => {});',
+      parserOptions: {
+        ecmaVersion: 11,
+      },
+      errors: [{
+        message: 'Using Korean characters: /패스/module.js',
+      }, {
+        message: 'Using Korean characters: "/컴포넌트.jsx"',
+      }],
+    },
+    {
+      code: `
+        async function demo() {
+          await import(token ? './모듈a.js' : './모듈b.js');
+        }
+      `,
+      parserOptions: {
+        ecmaVersion: 11,
+      },
+      errors: [{
+        message: 'Using Korean characters: \'./모듈a.js\'',
+      }, {
+        message: 'Using Korean characters: \'./모듈b.js\'',
       }],
     },
   ],

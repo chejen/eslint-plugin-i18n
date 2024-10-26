@@ -77,7 +77,51 @@ ruleTester.run('no-greek-character', rule, {
         excludeArgsForFunctions: ['i18n.t'],
       }],
     },
+
+    // Special case: bypass module related checks
+    {
+      code: 'require(`${basePath}/συστατικό.jsx`); require(basePath + "μονοπάτι/component.jsx")',
+      options: [{
+        excludeArgsForFunctions: ['require'],
+      }],
+      parserOptions: {
+        ecmaVersion: 6,
+      },
+    },
+    {
+      code: `import 'μονάδα μέτρησης'; import { doSomething } from 'μονάδα μέτρησης/api';`,
+      options: [{
+        excludeModuleImports: true,
+      }],
+      parserOptions: {
+        ecmaVersion: 6,
+        sourceType: 'module',
+      },
+    },
+    {
+      code: 'import(`${basePath}/μονοπάτι/module.js`); import(basePath + "/συστατικό.jsx").then((cmp) => {});',
+      options: [{
+        excludeModuleImports: true,
+      }],
+      parserOptions: {
+        ecmaVersion: 11,
+      },
+    },
+    {
+      code: `
+        async function demo() {
+          await import(token ? './μονάδα μέτρησηςa.js' : './μονάδα μέτρησηςb.js');
+        }
+      `,
+      options: [{
+        excludeModuleImports: true,
+      }],
+      parserOptions: {
+        ecmaVersion: 11,
+      },
+    },
   ],
+
   invalid: [
     // General
     {
@@ -224,6 +268,57 @@ ruleTester.run('no-greek-character', rule, {
         message: 'Using Greek characters: "άκυρος"', type: 'Literal',
       }, {
         message: 'Using Greek characters: "προεπιλεγμένη τιμή"', type: 'Literal',
+      }],
+    },
+
+    // Path or module names would be flagged by default.
+    {
+      code: 'require(`${basePath}/συστατικό.jsx`); require(basePath + "μονοπάτι/component.jsx");',
+      parserOptions: {
+        ecmaVersion: 6,
+      },
+      errors: [{
+        message: 'Using Greek characters: /συστατικό.jsx',
+      }, {
+        message: 'Using Greek characters: "μονοπάτι/component.jsx"',
+      }],
+    },
+    {
+      code: `import "μονάδα μέτρησης"; import { doSomething } from 'μονάδα μέτρησης/api'`,
+      parserOptions: {
+        ecmaVersion: 6,
+        sourceType: 'module',
+      },
+      errors: [{
+        message: 'Using Greek characters: "μονάδα μέτρησης"',
+      }, {
+        message: 'Using Greek characters: \'μονάδα μέτρησης/api\'',
+      }],
+    },
+    {
+      code: 'import(`${basePath}/μονοπάτι/module.js`); import(basePath + "/συστατικό.jsx").then(cmp => {});',
+      parserOptions: {
+        ecmaVersion: 11,
+      },
+      errors: [{
+        message: 'Using Greek characters: /μονοπάτι/module.js',
+      }, {
+        message: 'Using Greek characters: "/συστατικό.jsx"',
+      }],
+    },
+    {
+      code: `
+        async function demo() {
+          await import(token ? './μονάδα μέτρησηςa.js' : './μονάδα μέτρησηςb.js');
+        }
+      `,
+      parserOptions: {
+        ecmaVersion: 11,
+      },
+      errors: [{
+        message: 'Using Greek characters: \'./μονάδα μέτρησηςa.js\'',
+      }, {
+        message: 'Using Greek characters: \'./μονάδα μέτρησηςb.js\'',
       }],
     },
   ],

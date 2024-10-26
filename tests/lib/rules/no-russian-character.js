@@ -77,7 +77,51 @@ ruleTester.run('no-russian-character', rule, {
         excludeArgsForFunctions: ['i18n.t'],
       }],
     },
+
+    // Special case: bypass module related checks
+    {
+      code: 'require(`${basePath}/компоненты.jsx`); require(basePath + "Пути/component.jsx")',
+      options: [{
+        excludeArgsForFunctions: ['require'],
+      }],
+      parserOptions: {
+        ecmaVersion: 6,
+      },
+    },
+    {
+      code: `import 'Модули'; import { doSomething } from 'Модули/api';`,
+      options: [{
+        excludeModuleImports: true,
+      }],
+      parserOptions: {
+        ecmaVersion: 6,
+        sourceType: 'module',
+      },
+    },
+    {
+      code: 'import(`${basePath}/Пути/module.js`); import(basePath + "/компоненты.jsx").then(cmp => {});',
+      options: [{
+        excludeModuleImports: true,
+      }],
+      parserOptions: {
+        ecmaVersion: 11,
+      },
+    },
+    {
+      code: `
+        async function demo() {
+          await import(token ? './Модулиa.js' : './Модулиb.js');
+        }
+      `,
+      options: [{
+        excludeModuleImports: true,
+      }],
+      parserOptions: {
+        ecmaVersion: 11,
+      },
+    },
   ],
+
   invalid: [
     // General
     {
@@ -243,6 +287,57 @@ ruleTester.run('no-russian-character', rule, {
         message: 'Using Russian characters: "неверный"', type: 'Literal',
       }, {
         message: 'Using Russian characters: "значение по умолчанию"', type: 'Literal',
+      }],
+    },
+
+    // Path or module names would be flagged by default.
+    {
+      code: 'require(`${basePath}/компоненты.jsx`); require(basePath + "Пути/component.jsx");',
+      parserOptions: {
+        ecmaVersion: 6,
+      },
+      errors: [{
+        message: 'Using Russian characters: /компоненты.jsx',
+      }, {
+        message: 'Using Russian characters: "Пути/component.jsx"',
+      }],
+    },
+    {
+      code: `import "Модули"; import { doSomething } from 'Модули/api'`,
+      parserOptions: {
+        ecmaVersion: 6,
+        sourceType: 'module',
+      },
+      errors: [{
+        message: 'Using Russian characters: "Модули"',
+      }, {
+        message: 'Using Russian characters: \'Модули/api\'',
+      }],
+    },
+    {
+      code: 'import(`${basePath}/Пути/module.js`); import(basePath + "/компоненты.jsx").then(cmp => {});',
+      parserOptions: {
+        ecmaVersion: 11,
+      },
+      errors: [{
+        message: 'Using Russian characters: /Пути/module.js',
+      }, {
+        message: 'Using Russian characters: "/компоненты.jsx"',
+      }],
+    },
+    {
+      code: `
+        async function demo() {
+          await import(token ? './Модулиa.js' : './Модулиb.js');
+        }
+      `,
+      parserOptions: {
+        ecmaVersion: 11,
+      },
+      errors: [{
+        message: 'Using Russian characters: \'./Модулиa.js\'',
+      }, {
+        message: 'Using Russian characters: \'./Модулиb.js\'',
       }],
     },
   ],

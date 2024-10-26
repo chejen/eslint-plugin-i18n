@@ -77,7 +77,51 @@ ruleTester.run('no-japanese-character', rule, {
         excludeArgsForFunctions: ['i18n.t'],
       }],
     },
+
+    // Special case: bypass module related checks
+    {
+      code: 'require(`${basePath}/コンポーネント.jsx`); require(basePath + "路径/component.jsx")',
+      options: [{
+        excludeArgsForFunctions: ['require'],
+      }],
+      parserOptions: {
+        ecmaVersion: 6,
+      },
+    },
+    {
+      code: `import 'モジュール'; import { doSomething } from 'モジュール/api';`,
+      options: [{
+        excludeModuleImports: true,
+      }],
+      parserOptions: {
+        ecmaVersion: 6,
+        sourceType: 'module',
+      },
+    },
+    {
+      code: 'import(`${basePath}/パス/module.js`); import(basePath + "/コンポーネント.jsx").then(cmp => {});',
+      options: [{
+        excludeModuleImports: true,
+      }],
+      parserOptions: {
+        ecmaVersion: 11,
+      },
+    },
+    {
+      code: `
+        async function demo() {
+          await import(token ? './モジュール-a.js' : './モジュール-b.js');
+        }
+      `,
+      options: [{
+        excludeModuleImports: true,
+      }],
+      parserOptions: {
+        ecmaVersion: 11,
+      },
+    },
   ],
+
   invalid: [
     // General
     {
@@ -227,6 +271,57 @@ ruleTester.run('no-japanese-character', rule, {
         message: 'Using Japanese characters: "無効"', type: 'Literal',
       }, {
         message: 'Using Japanese characters: "既定値"', type: 'Literal',
+      }],
+    },
+
+    // Path or module names would be flagged by default.
+    {
+      code: 'require(`${basePath}/コンポーネント.jsx`); require(basePath + "路径/component.jsx");',
+      parserOptions: {
+        ecmaVersion: 6,
+      },
+      errors: [{
+        message: 'Using Japanese characters: /コンポーネント.jsx',
+      }, {
+        message: 'Using Japanese characters: "路径/component.jsx"',
+      }],
+    },
+    {
+      code: `import "モジュール"; import { doSomething } from 'モジュール/api'`,
+      parserOptions: {
+        ecmaVersion: 6,
+        sourceType: 'module',
+      },
+      errors: [{
+        message: 'Using Japanese characters: "モジュール"',
+      }, {
+        message: 'Using Japanese characters: \'モジュール/api\'',
+      }],
+    },
+    {
+      code: 'import(`${basePath}/パス/module.js`); import(basePath + "/コンポーネント.jsx").then(cmp => {});',
+      parserOptions: {
+        ecmaVersion: 11,
+      },
+      errors: [{
+        message: 'Using Japanese characters: /パス/module.js',
+      }, {
+        message: 'Using Japanese characters: "/コンポーネント.jsx"',
+      }],
+    },
+    {
+      code: `
+        async function demo() {
+          await import(token ? './モジュール-a.js' : './モジュール-b.js');
+        }
+      `,
+      parserOptions: {
+        ecmaVersion: 11,
+      },
+      errors: [{
+        message: 'Using Japanese characters: \'./モジュール-a.js\'',
+      }, {
+        message: 'Using Japanese characters: \'./モジュール-b.js\'',
       }],
     },
   ],
