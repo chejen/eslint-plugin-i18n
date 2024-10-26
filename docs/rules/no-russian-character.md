@@ -26,7 +26,7 @@ The rule takes an object option with the following keys:
 
 ### {boolean} `includeIdentifier`
 
-* In general, we don't check identifiers for l10n/i18n. If you would like to lint them, set `includeIdentifier` as `true` to enforce checking.
+* In general, we don't check identifiers for l10n/i18n. But if you'd like to lint them, set `includeIdentifier` as `true` to enforce checking.
 
 ```json
 "i18n/no-russian-character": [
@@ -50,9 +50,23 @@ The rule takes an object option with the following keys:
 ]
 ```
 
+### {boolean} `excludeModuleImports`
+
+* Set `excludeModuleImports` to `true` if you wanna skip checks from ES6 imports or dynamic imports.
+> If you're using CommonJS modules, you can leverage [excludeArgsForFunctions](#array-excludeargsforfunctions) option.
+
+```json
+"i18n/no-chinese-character": [
+  "warn",
+  {
+    "excludeModuleImports": true
+  }
+]
+```
+
 ### {array} `excludeArgsForFunctions`
 
-* We exclude from the check the functions specified in the `excludeArgsForFunctions` option.
+* Skip the checks for the arguments of functions by specifying the `excludeArgsForFunctions` option.
 
 ```json
 "i18n/no-russian-character": [
