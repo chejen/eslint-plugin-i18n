@@ -31,10 +31,10 @@
     "codecov": "^3.8.3",
     "eslint": "^9.13.0",
     "globals": "^15.11.0",
-    "husky": "^9.0.6",
-    "lint-staged": "^15.2.0",
-    "mocha": "^10.2.0",
-    "nyc": "^15.1.0"
+    "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
+    "mocha": "^10.7.3",
+    "nyc": "^17.1.0"
   },
   "lint-staged": {
     "*.js": [
