@@ -18,4 +18,9 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm test
-      - run: npm run coverage
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v4
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        with:
+          verbose: true
