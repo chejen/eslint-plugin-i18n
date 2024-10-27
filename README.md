@@ -83,6 +83,16 @@ eslint-plugin-i18n is licensed under the [MIT License](http://www.opensource.org
 
 # Changelog
 
+## v2.4.0 - October 27, 2024
+
+Features
+- Added `excludeModuleImports` option to exclude imports from linting.
+- Updated the `excludeArgsForFunctions` option.
+
+Chore
+- Upgreded devDependencies.
+- Applied auto-publish.
+
 ## v2.3.1 - April 10, 2024
 - Extended the ability of `excludeArgsForFunctions` option.
 
