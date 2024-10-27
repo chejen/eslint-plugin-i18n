@@ -2,7 +2,8 @@
 .husky
 .nyc_output
 coverage
+docs
 tests
 .editorconfig
-.eslintignore
-.eslintrc
+eslint.config.mjs
+package-lock.json
